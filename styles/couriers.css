@@ -1,0 +1,24 @@
+#courier-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  #courier-form input,
+  #courier-form button {
+    padding: 10px;
+    font-size: 16px;
+  }
+  
+  #courier-list {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  #courier-list li {
+    padding: 10px;
+    background-color: #f4f4f4;
+    margin-bottom: 5px;
+    border-radius: 5px;
+  }

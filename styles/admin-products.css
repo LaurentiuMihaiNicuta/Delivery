@@ -1,0 +1,148 @@
+/* styles/admin-products.css */
+
+#search-bar-container {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  #search-bar {
+    width: 80%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  #categories-nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  .category-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 5px;
+    user-select: none;
+  }
+  
+  .category-label input {
+    display: none;
+  }
+  
+  .category-label.selected {
+    background-color: #45a049;
+  }
+  
+  #products-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+  }
+  
+  .product {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+  }
+  
+  .product-image-container {
+    min-height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .product-image {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 5px;
+  }
+  
+  .product h3 {
+    margin-top: 10px;
+    font-size: 1.2em;
+  }
+  
+  .product p {
+    margin: 5px 0;
+  }
+  
+  .edit-button,
+  #add-product-button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+
+  #add-product-button{
+    margin-top: 50px;
+    border:1px solid black;
+    
+  }
+  #add-product-button-container{
+    background-color: red;
+    margin-top:5rem;
+    display: flex;
+    justify-content: center;
+    
+  }
+  .edit-button:hover,
+  #add-product-button:hover {
+    background-color: #45a049;
+  }
+  
+  /* Modal styles */
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+  }
+  
+  .modal-content {
+    background-color: #fefefe;
+    margin: 10% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 5px;
+    text-align: center;
+  }
+  
+  .close-button {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .close-button:hover,
+  .close-button:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  

@@ -1,0 +1,17 @@
+#app {
+    
+    height: 100vh;
+}
+
+nav{
+    background-color: rgb(247, 149, 149);
+    height: 5%;
+}
+
+ul{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 100%;
+    list-style-type: none;
+}
