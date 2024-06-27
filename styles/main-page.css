@@ -1,17 +1,37 @@
+
+/* main-page.css */
+
 #app {
-    
     height: 100vh;
 }
 
-nav{
-    background-color: rgb(247, 149, 149);
+nav {
+    background-color: rgb(255, 182, 80);
     height: 5%;
+
+    
 }
 
-ul{
+nav > ul > li > a {
+    background-color: #4CAF50;
+    padding: 10px;
+    border-radius: 6px;
+    color:white;
+}
+
+ul {
     display: flex;
     justify-content: space-around;
     align-items: center;
     height: 100%;
     list-style-type: none;
+}
+
+#cart-link {
+    transition: background-color 0.3s;
+}
+
+nav a {
+    text-decoration: none; /* Elimină sublinierea */
+    color: inherit; /* Păstrează culoarea moștenită */
 }

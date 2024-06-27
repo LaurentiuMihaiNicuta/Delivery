@@ -1,8 +1,13 @@
+//admin-main.js
+
 import '../styles/admin.css';
 import { renderAdminProducts } from './modules/admin-products.js';
 //import { renderReports } from './modules/reports.js';
 import { renderCouriers } from './modules/couriers.js';
 //import { renderOrders } from './modules/orders.js';
+import { renderOrders } from './modules/orders.js';
+
+
 import { auth } from '../firebase-config.js';
 import { signOut } from 'firebase/auth';
 import { renderRoleSelection } from '../role-selection.js';
@@ -29,7 +34,7 @@ export function renderAdminMainPage() {
   document.getElementById('admin-products-link').addEventListener('click', renderAdminProducts);
   //document.getElementById('admin-reports-link').addEventListener('click', renderReports);
   document.getElementById('admin-couriers-link').addEventListener('click', renderCouriers);
-  //document.getElementById('admin-orders-link').addEventListener('click', renderOrders);
+  document.getElementById('admin-orders-link').addEventListener('click', renderOrders);
   document.getElementById('logout-button').addEventListener('click', handleLogout);
 
   // Redirecționăm la dashboard-ul principal inițial

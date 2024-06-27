@@ -1,0 +1,56 @@
+/* admin-orders.css */
+
+/* admin-orders.css */
+
+#orders-filters {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: #e2e2e2;
+  border-radius: 5px;
+  width: 100%;
+}
+
+#orders-filters label {
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+#orders-filters input[type="date"],
+#orders-filters input[type="text"] {
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+#orders-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.order {
+  padding: 15px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+}
+
+.order p {
+  margin: 5px 0;
+}
+
+.order p:first-child {
+  font-weight: bold;
+}
+
+.order p:last-child {
+  font-style: italic;
+}
+
+.order .order-products {
+  margin-top: 10px;
+  font-weight: normal;
+}

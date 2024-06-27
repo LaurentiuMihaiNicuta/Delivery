@@ -1,8 +1,9 @@
 //products.js
 
 import { db, auth } from '../../firebase-config.js';
-import { collection, getDocs, doc, getDoc, setDoc, updateDoc, arrayUnion } from 'firebase/firestore';
-import '/styles/products.css';
+import { collection, getDocs, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
+import '/styles/client-styles/products.css';
+import { showAlert } from '../../alert.js'; // Asigură-te că ai importat showAlert
 
 let selectedCategories = [];
 let searchTerm = '';
@@ -93,7 +94,11 @@ async function renderFilteredProducts() {
       <h3>${product.name}</h3>
       <p>${product.quantity} ${product.measure ? product.measure : ''}</p>
       <p>Pret: ${product.price} RON</p>
-      <button class="add-to-cart-button" data-id="${product.id}">Adauga</button>
+      ${product.stock > 0 ? `
+        <button class="add-to-cart-button" data-id="${product.id}">Adauga</button>
+      ` : `
+        <button class="out-of-stock-button" disabled>Indisponibil</button>
+      `}
     </div>
   `).join('');
 
@@ -109,18 +114,30 @@ async function renderFilteredProducts() {
 async function addToCart(productId) {
   const user = auth.currentUser;
   if (!user) {
-    alert("Please log in to add products to your cart.");
+    showAlert('Please log in to add products to your cart.', 'error');
     return;
   }
 
   const cartRef = doc(db, 'carts', user.uid);
   const cartDoc = await getDoc(cartRef);
+  let cartData = cartDoc.data();
+
   if (!cartDoc.exists()) {
-    await setDoc(cartRef, { products: [productId] });
+    cartData = {
+      products: [{ id: productId, quantity: 1 }]
+    };
+    await setDoc(cartRef, cartData);
   } else {
+    const productInCart = cartData.products.find(product => product.id === productId);
+    if (productInCart) {
+      productInCart.quantity += 1;
+    } else {
+      cartData.products.push({ id: productId, quantity: 1 });
+    }
     await updateDoc(cartRef, {
-      products: arrayUnion(productId)
+      products: cartData.products
     });
   }
-  alert("Product added to cart!");
+
+  showAlert('Product added to cart!', 'success');
 }

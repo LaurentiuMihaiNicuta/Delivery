@@ -1,0 +1,23 @@
+#order-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 80vh;
+  text-align: center;
+}
+
+#order-details {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#order-details h2 {
+  margin-bottom: 10px;
+}
+
+#order-details p {
+  margin: 5px 0;
+}

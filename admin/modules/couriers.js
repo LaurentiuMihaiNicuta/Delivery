@@ -1,19 +1,21 @@
 import { auth, db } from '../../firebase-config.js';
 import { collection, getDocs } from 'firebase/firestore';
-import '../../styles/couriers.css';
+import '../../styles/admin-styles/admin-couriers.css';
 
 export async function renderCouriers() {
   const adminContentDiv = document.getElementById('admin-content');
   adminContentDiv.innerHTML = `
-    <h2>Gestionează Curieri</h2>
-    <form id="courier-form">
-      <input type="text" id="courier-name" placeholder="Nume" required>
-      <input type="email" id="courier-email" placeholder="Email" required>
-      <input type="password" id="courier-password" placeholder="Parola" required>
-      <button type="submit">Adaugă Curier</button>
-    </form>
-    <h3>Lista Curieri</h3>
-    <ul id="courier-list"></ul>
+    <div id="courier-management">
+      <h2>Gestionează Curieri</h2>
+      <form id="courier-form">
+        <input type="text" id="courier-name" placeholder="Nume" required>
+        <input type="email" id="courier-email" placeholder="Email" required>
+        <input type="password" id="courier-password" placeholder="Parola" required>
+        <button type="submit">Adaugă Curier</button>
+      </form>
+      <h3>Lista Curieri</h3>
+      <div id="courier-list"></div>
+    </div>
   `;
 
   document.getElementById('courier-form').addEventListener('submit', async (e) => {
@@ -50,9 +52,13 @@ export async function renderCouriers() {
 async function renderCourierList() {
   const courierList = document.getElementById('courier-list');
   const couriersSnapshot = await getDocs(collection(db, 'couriers'));
-  const couriers = couriersSnapshot.docs.map(doc => doc.data());
+  const couriers = couriersSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
   courierList.innerHTML = couriers.map(courier => `
-    <li>${courier.name} - ${courier.email} - ${courier.createdAt.toDate().toLocaleDateString()}</li>
+    <div class="courier-card">
+      <p><strong>Nume:</strong> ${courier.name}</p>
+      <p><strong>Email:</strong> ${courier.email}</p>
+      <p><strong>Creat la:</strong> ${courier.createdAt.toDate().toLocaleDateString()}</p>
+    </div>
   `).join('');
 }

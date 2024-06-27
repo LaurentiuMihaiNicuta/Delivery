@@ -3,7 +3,7 @@ import { auth, db } from '../../firebase-config.js';
 import { signOut, updatePassword, reauthenticateWithCredential, EmailAuthProvider } from 'firebase/auth';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { renderLogin } from '../client-login.js';
-import '/styles/profile.css'
+import '/styles/client-styles/profile.css'
 
 export async function renderProfile() {
   const contentDiv = document.getElementById('content');

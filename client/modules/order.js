@@ -1,7 +1,7 @@
-//order.jsimport { db, auth } from '../../firebase-config.js';
+//order.js import { db, auth } from '../../firebase-config.js';
 import { db, auth } from '../../firebase-config.js';
 import { collection, doc, getDoc, getDocs, query, where, orderBy, limit } from 'firebase/firestore';
-import '/styles/order.css';
+import '/styles/client-styles/order.css';
 
 export async function renderOrder() {
   const user = auth.currentUser;
@@ -20,8 +20,14 @@ export async function renderOrder() {
   );
   const ordersSnapshot = await getDocs(userOrdersQuery);
 
+  const contentDiv = document.getElementById('content');
+  
   if (ordersSnapshot.empty) {
-    alert("No orders found.");
+    contentDiv.innerHTML = `
+      <div id="order-container">
+        <h2>Nu ai nicio comanda momentan!</h2>
+      </div>
+    `;
     return;
   }
 
@@ -32,15 +38,29 @@ export async function renderOrder() {
   const courierDoc = await getDoc(courierRef);
   const courierData = courierDoc.data();
 
-  const contentDiv = document.getElementById('content');
+  let orderStatusMessage = '';
+  if (orderData.status === 'pending') {
+    orderStatusMessage = 'Comanda ta este în preparare';
+  } else if (orderData.status === 'picked up') {
+    orderStatusMessage = 'Comanda ta este pe drum!';
+  }
+
+  if (orderData.status === 'delivered') {
+    contentDiv.innerHTML = `
+      <div id="order-container">
+        <h2>Nu ai nicio comanda momentan!</h2>
+      </div>
+    `;
+    return;
+  }
+
   contentDiv.innerHTML = `
     <div id="order-container">
       <div id="order-details">
-        <h2>Order Details</h2>
-        <p>Courier: ${courierData ? courierData.name : 'Unknown'}</p>
-        <p>Status: ${orderData.status}</p>
+        <h2>Comanda ta este pe drum!</h2>
+        <p>Curierul tau este ${courierData ? courierData.name : 'Unknown'}</p>
+        <p>Status: ${orderStatusMessage}</p>
       </div>
-      <div id="order-content"></div>
     </div>
   `;
 }

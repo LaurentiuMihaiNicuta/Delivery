@@ -1,7 +1,7 @@
 import { db, storage } from '../../firebase-config.js'; // Asigură-te că ai configurat Firebase Storage
 import { collection, getDocs, doc, updateDoc, addDoc, deleteDoc, setDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
-import '../../styles/admin-products.css';
+import '../../styles/admin-styles/admin-products.css';
 
 let selectedCategories = [];
 let searchTerm = '';
@@ -11,48 +11,52 @@ export async function renderAdminProducts() {
   await loadCategories(); // Load categories before rendering the UI
 
   const adminContentDiv = document.getElementById('admin-content');
-  adminContentDiv.innerHTML = `
-    <div id="search-bar-container">
-      <input type="text" id="search-bar" placeholder="Cauta produse...">
-    </div>
-    <nav id="categories-nav"></nav>
-    <div id="products-list"></div>
-    <div id="add-product-button-container">
-      <button id="add-product-button">Adaugă un produs</button>
-    </div>
+adminContentDiv.innerHTML = `
+  <nav id="categories-nav"></nav>
+  <div id="search-bar-container">
+    <input type="text" id="search-bar" placeholder="Cauta produse...">
+  </div>
+  <div id="add-product-button-container">
+    <button id="add-product-button">Adaugă un produs</button>
+  </div>
+  <div id="products-list"></div>
+  
 
-    <div id="edit-modal" class="modal">
-      <div class="modal-content">
-        <span class="close-button">&times;</span>
-        <h2>Modifică Produs</h2>
-        <form id="edit-form">
-          <input type="text" id="edit-name" placeholder="Nume" required>
-          <input type="number" id="edit-quantity" placeholder="Cantitate" step="0.1" required>
-          <input type="text" id="edit-measure" placeholder="Măsură">
-          <input type="number" id="edit-price" placeholder="Preț" step="0.1" required>
-          <select id="edit-category" required></select>
-          <input type="file" id="edit-image" accept="image/*">
-          <button type="submit">Salvează Modificările</button>
-        </form>
-      </div>
+  <div id="edit-modal" class="modal">
+    <div class="modal-content">
+      <span class="close-button">&times;</span>
+      <h2>Modifică Produs</h2>
+      <form id="edit-form">
+        <input type="text" id="edit-name" placeholder="Nume" required>
+        <input type="number" id="edit-quantity" placeholder="Cantitate" step="0.1" required>
+        <input type="text" id="edit-measure" placeholder="Măsură">
+        <input type="number" id="edit-price" placeholder="Preț" step="0.1" required>
+        <input type="number" id="edit-stock" placeholder="Stoc" required>
+        <select id="edit-category" required></select>
+        <input type="file" id="edit-image" accept="image/*">
+        <button type="submit">Salvează Modificările</button>
+      </form>
     </div>
+  </div>
 
-    <div id="add-modal" class="modal">
-      <div class="modal-content">
-        <span class="close-button">&times;</span>
-        <h2>Adaugă Produs</h2>
-        <form id="add-form">
-          <input type="text" id="add-name" placeholder="Nume" required>
-          <input type="number" id="add-quantity" placeholder="Cantitate" step="0.1" required>
-          <input type="text" id="add-measure" placeholder="Măsură">
-          <input type="number" id="add-price" placeholder="Preț" step="0.1" required>
-          <select id="add-category" required></select>
-          <input type="file" id="add-image" accept="image/*" required>
-          <button type="submit">Adaugă Produs</button>
-        </form>
-      </div>
+  <div id="add-modal" class="modal">
+    <div class="modal-content">
+      <span class="close-button">&times;</span>
+      <h2>Adaugă Produs</h2>
+      <form id="add-form">
+        <input type="text" id="add-name" placeholder="Nume" required>
+        <input type="number" id="add-quantity" placeholder="Cantitate" step="0.1" required>
+        <input type="text" id="add-measure" placeholder="Măsură">
+        <input type="number" id="add-price" placeholder="Preț" step="0.1" required>
+        <input type="number" id="add-stock" placeholder="Stoc" required>
+        <select id="add-category" required></select>
+        <input type="file" id="add-image" accept="image/*" required>
+        <button type="submit">Adaugă Produs</button>
+      </form>
     </div>
-  `;
+  </div>
+`;
+
 
   // Adăugăm event listeners pentru checkbox-uri
   updateCategoriesNav();
@@ -79,9 +83,10 @@ export async function renderAdminProducts() {
     const quantity = document.getElementById('edit-quantity').value;
     const measure = document.getElementById('edit-measure').value;
     const price = document.getElementById('edit-price').value;
+    const stock = document.getElementById('edit-stock').value;
     let category = document.getElementById('edit-category').value;
     const imageFile = document.getElementById('edit-image').files[0];
-
+  
     try {
       let imagePath = null;
       if (imageFile) {
@@ -90,7 +95,7 @@ export async function renderAdminProducts() {
         await uploadBytes(imageRef, imageFile);
         imagePath = await getDownloadURL(imageRef);
       }
-
+  
       if (category === 'new') {
         category = prompt('Introdu numele noii categorii:');
         if (category) {
@@ -99,19 +104,20 @@ export async function renderAdminProducts() {
           updateCategoriesNav();
         }
       }
-
+  
       const updateData = {
         name,
         quantity,
         measure,
         price,
+        stock,
         category,
       };
       
       if (imagePath) {
         updateData.imagePath = imagePath;
       }
-
+  
       await updateDoc(doc(db, 'products', id), updateData);
       document.getElementById('edit-modal').style.display = 'none';
       renderFilteredProducts();
@@ -127,6 +133,7 @@ export async function renderAdminProducts() {
     const quantity = document.getElementById('add-quantity').value;
     const measure = document.getElementById('add-measure').value;
     const price = document.getElementById('add-price').value;
+    const stock = document.getElementById('add-stock').value;
     let category = document.getElementById('add-category').value;
     const imageFile = document.getElementById('add-image').files[0];
   
@@ -139,7 +146,7 @@ export async function renderAdminProducts() {
           updateCategoriesNav();
         }
       }
-
+  
       // Încărcăm imaginea în Firebase Storage
       const imageRef = ref(storage, `productsImages/${imageFile.name}`);
       await uploadBytes(imageRef, imageFile);
@@ -151,6 +158,7 @@ export async function renderAdminProducts() {
         quantity,
         measure,
         price,
+        stock,
         category,
         imagePath,
       });
@@ -245,6 +253,7 @@ async function renderFilteredProducts() {
       <h3>${product.name}</h3>
       <p>${product.quantity} ${product.measure ? product.measure : ''}</p>
       <p>Preț: ${product.price} RON</p>
+      <p>Stoc: ${product.stock}</p>
       <button class="edit-button" data-id="${product.id}">Modifică</button>
       <button class="delete-button" data-id="${product.id}" data-image-path="${product.imagePath}">Șterge</button>
     </div>
@@ -284,6 +293,7 @@ function openEditModal(product) {
   document.getElementById('edit-quantity').value = product.quantity;
   document.getElementById('edit-measure').value = product.measure || '';
   document.getElementById('edit-price').value = product.price;
+  document.getElementById('edit-stock').value = product.stock;
   document.getElementById('edit-category').value = product.category;
   updateCategorySelectOptions('edit-category');
   document.getElementById('edit-modal').style.display = 'block';

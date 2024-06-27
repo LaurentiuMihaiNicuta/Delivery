@@ -12,18 +12,6 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('Auth state changed:', user); // Debugging log
     if (user) {
       try {
-        const role = localStorage.getItem('debugRole'); // Doar pentru debug
-        if (role) {
-          if (role === 'admin') {
-            renderAdminMainPage();
-          } else if (role === 'client') {
-            renderClientMainPage();
-          } else if (role === 'courier') {
-            renderCourierMainPage();
-          }
-          return;
-        }
-
         // Verificăm colecția 'users'
         const userDoc = await getDoc(doc(db, 'users', user.uid));
         if (userDoc.exists()) {
@@ -57,27 +45,5 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       renderRoleSelection();
     }
-  });
-
-  // Doar pentru debug - butoane pentru a seta rolul manual
-  const debugButtons = document.createElement('div');
-  debugButtons.innerHTML = `
-    <button id="debug-client">Set Client Role</button>
-    <button id="debug-admin">Set Admin Role</button>
-    <button id="debug-courier">Set Courier Role</button>
-  `;
-  document.body.appendChild(debugButtons);
-
-  document.getElementById('debug-client').addEventListener('click', () => {
-    localStorage.setItem('debugRole', 'client');
-    renderClientMainPage();
-  });
-  document.getElementById('debug-admin').addEventListener('click', () => {
-    localStorage.setItem('debugRole', 'admin');
-    renderAdminMainPage();
-  });
-  document.getElementById('debug-courier').addEventListener('click', () => {
-    localStorage.setItem('debugRole', 'courier');
-    renderCourierMainPage();
   });
 });
