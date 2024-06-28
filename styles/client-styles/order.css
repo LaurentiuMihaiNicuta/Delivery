@@ -1,13 +1,14 @@
 #order-container {
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+  gap: 20px;
   height: 80vh;
-  text-align: center;
 }
 
-#order-details {
+#order-details,
+#chat-container {
+  flex: 0 0 45%;
   background-color: #f9f9f9;
   padding: 20px;
   border-radius: 10px;
@@ -20,4 +21,50 @@
 
 #order-details p {
   margin: 5px 0;
+}
+
+#chat-box {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+#messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 10px;
+  max-height: 400px; /* Max height for the messages container */
+}
+
+.message {
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #e1ffc7;
+}
+
+#message-form {
+  display: flex;
+}
+
+#message-input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px 0 0 5px;
+}
+
+#message-form button {
+  padding: 10px;
+  border: 1px solid #4CAF50;
+  background-color: #4CAF50;
+  color: white;
+  cursor: pointer;
+  border-radius: 0 5px 5px 0;
+}
+
+#message-form button:hover {
+  background-color: #45a049;
 }

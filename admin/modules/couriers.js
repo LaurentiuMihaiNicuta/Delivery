@@ -1,5 +1,8 @@
+//couriers.js
+
 import { auth, db } from '../../firebase-config.js';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, doc, setDoc } from 'firebase/firestore';
+import { getFunctions, httpsCallable } from 'firebase/functions';
 import '../../styles/admin-styles/admin-couriers.css';
 
 export async function renderCouriers() {
@@ -11,6 +14,7 @@ export async function renderCouriers() {
         <input type="text" id="courier-name" placeholder="Nume" required>
         <input type="email" id="courier-email" placeholder="Email" required>
         <input type="password" id="courier-password" placeholder="Parola" required>
+        <input type="text" id="courier-phone" placeholder="Telefon" required>
         <button type="submit">Adaugă Curier</button>
       </form>
       <h3>Lista Curieri</h3>
@@ -23,6 +27,7 @@ export async function renderCouriers() {
     const name = document.getElementById('courier-name').value;
     const email = document.getElementById('courier-email').value;
     const password = document.getElementById('courier-password').value;
+    const phone = document.getElementById('courier-phone').value;
 
     try {
       const response = await fetch('https://us-central1-licentanicutalaurentiu.cloudfunctions.net/createCourier', {
@@ -30,7 +35,7 @@ export async function renderCouriers() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, password, name }),
+        body: JSON.stringify({ email, password, name, phone }),
       });
 
       if (response.ok) {
@@ -58,7 +63,26 @@ async function renderCourierList() {
     <div class="courier-card">
       <p><strong>Nume:</strong> ${courier.name}</p>
       <p><strong>Email:</strong> ${courier.email}</p>
+      <p><strong>Telefon:</strong> ${courier.phone}</p>
       <p><strong>Creat la:</strong> ${courier.createdAt.toDate().toLocaleDateString()}</p>
+      <button class="delete-courier-button" data-id="${courier.id}">Șterge</button>
     </div>
   `).join('');
+
+  document.querySelectorAll('.delete-courier-button').forEach(button => {
+    button.addEventListener('click', async (e) => {
+      const courierId = e.target.dataset.id;
+      if (confirm('Ești sigur că vrei să ștergi acest curier?')) {
+        try {
+          const functions = getFunctions();
+          const deleteCourier = httpsCallable(functions, 'deleteCourier');
+          await deleteCourier({ uid: courierId });
+          renderCourierList();
+        } catch (error) {
+          console.error('Error deleting courier:', error);
+          alert('Eroare la ștergerea curierului: ' + error.message);
+        }
+      }
+    });
+  });
 }

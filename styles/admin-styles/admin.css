@@ -1,0 +1,46 @@
+/* admin.css */
+
+#app {
+    height: 100vh;
+}
+
+.admin-nav {
+    background-color: rgb(255, 182, 80);
+    height: 5%;
+}
+
+.admin-nav ul {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 100%;
+    list-style-type: none;
+}
+
+.admin-nav ul li a {
+    background-color: #4CAF50;
+    padding: 10px;
+    border-radius: 6px;
+    color: white;
+    text-decoration: none; /* Elimină sublinierea */
+}
+
+.admin-nav ul li a:hover {
+    background-color: #45a049;
+}
+
+.fixed-logout-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.fixed-logout-button:hover {
+    background-color: #45a049;
+}

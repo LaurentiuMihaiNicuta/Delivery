@@ -1,0 +1,63 @@
+#client-chat-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 500px;
+    height: 400px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+  }
+  
+  #client-messages {
+    flex-grow: 1;
+    padding: 10px;
+    overflow-y: auto;
+  }
+  
+  .message.client {
+    background-color: #ffdab9; /* Portocaliu pal */
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .message.courier {
+    background-color: #b2f0b2; /* Verde pastel */
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+  }
+  
+  #client-message-form {
+    display: flex;
+    border-top: 1px solid #ccc;
+  }
+  
+  #client-message-input {
+    flex-grow: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 0 0 0 10px;
+  }
+  
+  #client-message-input:focus {
+    outline: none;
+  }
+  
+  #client-message-form button {
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 0 0 10px 0;
+  }
+  
+  #client-message-form button:hover {
+    background-color: #45a049;
+  }
+  

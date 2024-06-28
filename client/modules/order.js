@@ -1,6 +1,7 @@
 //order.js import { db, auth } from '../../firebase-config.js';
 import { db, auth } from '../../firebase-config.js';
 import { collection, doc, getDoc, getDocs, query, where, orderBy, limit } from 'firebase/firestore';
+import { renderClientChat } from './client-chat.js'; // Importăm funcția de randare a chatului
 import '/styles/client-styles/order.css';
 
 export async function renderOrder() {
@@ -61,6 +62,9 @@ export async function renderOrder() {
         <p>Curierul tau este ${courierData ? courierData.name : 'Unknown'}</p>
         <p>Status: ${orderStatusMessage}</p>
       </div>
+      <div id="chat-container"></div> <!-- Container pentru chat -->
     </div>
   `;
+
+  renderClientChat(orderDoc.id); // Randează chatul pentru comanda curentă
 }

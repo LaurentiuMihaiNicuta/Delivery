@@ -1,5 +1,6 @@
 
 /* main-page.css */
+/* admin.css */
 
 #app {
     height: 100vh;
@@ -8,6 +9,7 @@
 nav {
     background-color: rgb(255, 182, 80);
     height: 5%;
+    height:50%;
 
     
 }

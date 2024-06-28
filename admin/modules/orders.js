@@ -16,7 +16,9 @@ export async function renderOrders() {
       <label for="date-filter">Filter by Date:</label>
       <input type="date" id="date-filter">
     </div>
-    <div id="orders-list"></div>
+    <div id="orders-list-container">
+      <div id="orders-list"></div>
+    </div>
   `;
 
   await loadOrders();
@@ -37,7 +39,7 @@ async function loadOrders() {
       const courierDoc = await getDoc(doc(db, 'couriers', orderData.courierId));
 
       const totalAmount = orderData.products.reduce((total, product) => {
-        return total + (product.price * product.quantity);
+        return total + (Number(product.price) * product.orderedQuantity);
       }, 0);
 
       return {
@@ -77,15 +79,15 @@ function renderOrderList(orders) {
     <div class="order">
       <p>Order ID: ${order.id}</p>
       <p>Client: ${order.clientName}</p>
-      <p>Courier: ${order.courierName}</p>
-      <p>Address: ${order.address}</p>
-      <p>Status: ${order.status}</p>
-      <p>Total Amount: ${order.totalAmount} RON</p>
+      <p>Curier: ${order.courierName}</p>
+      <p>Addresa: ${order.address}</p>
+      <p>Statusul comenzii: ${order.status}</p>
+      <p>Valoarea totala: ${order.totalAmount} RON</p>
       <div class="order-products">
         <p>Products:</p>
         ${order.products.map(product => `
           <div>
-            <p>${product.name} - ${product.quantity} ${product.measure}</p>
+             <p>${product.name} - ${product.orderedQuantity} x ${product.quantity} ${product.measure} = ${(Number(product.price) * product.orderedQuantity).toFixed(2)} RON</p>
           </div>
         `).join('')}
       </div>

@@ -1,4 +1,5 @@
 /*couriers.css */
+/* admin-couriers.css */
 
 #courier-management {
   display: flex;
@@ -33,8 +34,9 @@
 
 .courier-card {
   padding: 15px;
-  background-color: #f4f4f4;
-  border-radius: 5px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -42,8 +44,15 @@
   margin: 5px 0;
 }
 
-#admin-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.courier-card button {
+  padding: 10px;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.courier-card button:hover {
+  background-color: #c82333;
 }

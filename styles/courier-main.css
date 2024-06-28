@@ -1,0 +1,58 @@
+#courier-main {
+    text-align: center;
+    padding: 20px;
+}
+
+#courier-current-order {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    text-align: left;
+}
+
+#courier-current-order h2 {
+    margin-bottom: 10px;
+}
+
+#courier-current-order p {
+    margin: 5px 0;
+}
+
+#update-status-button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+#update-status-button:hover {
+    background-color: #45a049;
+}
+
+.centered-text {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 18px;
+    color: #333;
+}
+
+.fixed-logout-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.fixed-logout-button:hover {
+    background-color: #45a049;
+}

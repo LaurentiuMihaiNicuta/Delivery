@@ -25,7 +25,7 @@ export async function renderCart() {
     .filter(product => productsList.some(cartProduct => cartProduct.id === product.id))
     .map(product => {
       const cartProduct = productsList.find(cartProduct => cartProduct.id === product.id);
-      return { ...product, quantity: cartProduct.quantity };
+      return { ...product, orderedQuantity: cartProduct.quantity };
     });
 
   const contentDiv = document.getElementById('content');
@@ -42,7 +42,7 @@ export async function renderCart() {
               <h3>${product.name}</h3>
               <p>${product.quantity} ${product.measure ? product.measure : ''}</p>
               <p>Pret: ${product.price} RON</p>
-              <p>Quantity: ${product.quantity}</p>
+              <p>Ordered Quantity: ${product.orderedQuantity}</p>
             </div>
             <button class="remove-from-cart-button" data-id="${product.id}">Remove</button>
           </div>
@@ -99,9 +99,9 @@ async function updateProductStock(cartProducts) {
     const productDoc = await getDoc(productRef);
     const productData = productDoc.data();
 
-    if (productData.stock >= cartProduct.quantity) {
+    if (productData.stock >= cartProduct.orderedQuantity) {
       await updateDoc(productRef, {
-        stock: productData.stock - cartProduct.quantity
+        stock: productData.stock - cartProduct.orderedQuantity
       });
     } else {
       throw new Error(`Not enough stock for product: ${productData.name}`);
@@ -109,9 +109,8 @@ async function updateProductStock(cartProducts) {
   }
 }
 
-
 function calculateTotal(cartProducts) {
-  return cartProducts.reduce((total, product) => total + (Number(product.price) * product.quantity), 0);
+  return cartProducts.reduce((total, product) => total + (Number(product.price) * product.orderedQuantity), 0);
 }
 
 async function removeFromCart(productId) {

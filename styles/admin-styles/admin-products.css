@@ -21,7 +21,7 @@
   flex-wrap: wrap;
   justify-content: center;
   margin-bottom: 20px;
-  width: 102%;
+  width: 100%; /* Adjust this if necessary */
 }
 
 .category-label {
@@ -111,7 +111,6 @@
   background-color: #45a049;
 }
 
-/* Modal styles */
 .modal {
   display: none;
   position: fixed;
@@ -149,9 +148,6 @@
   cursor: pointer;
 }
 
-#admin-content {
-  padding: 20px;
-}
 
 .modal-content form {
   display: flex;
@@ -184,7 +180,6 @@
   margin-bottom: 20px;
 }
 
-/* Responsive Styles */
 @media (max-width: 768px) {
   #search-bar {
     width: 100%;

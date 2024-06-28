@@ -1,73 +1,70 @@
-import { db, storage } from '../../firebase-config.js'; // Asigură-te că ai configurat Firebase Storage
+//admin-products.js
+import '../../styles/admin-styles/admin-products.css';
+import { db, storage } from '../../firebase-config.js'; 
 import { collection, getDocs, doc, updateDoc, addDoc, deleteDoc, setDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
-import '../../styles/admin-styles/admin-products.css';
+
 
 let selectedCategories = [];
 let searchTerm = '';
 let allCategories = [];
 
 export async function renderAdminProducts() {
-  await loadCategories(); // Load categories before rendering the UI
+  await loadCategories(); 
 
   const adminContentDiv = document.getElementById('admin-content');
-adminContentDiv.innerHTML = `
-  <nav id="categories-nav"></nav>
-  <div id="search-bar-container">
-    <input type="text" id="search-bar" placeholder="Cauta produse...">
-  </div>
-  <div id="add-product-button-container">
-    <button id="add-product-button">Adaugă un produs</button>
-  </div>
-  <div id="products-list"></div>
-  
-
-  <div id="edit-modal" class="modal">
-    <div class="modal-content">
-      <span class="close-button">&times;</span>
-      <h2>Modifică Produs</h2>
-      <form id="edit-form">
-        <input type="text" id="edit-name" placeholder="Nume" required>
-        <input type="number" id="edit-quantity" placeholder="Cantitate" step="0.1" required>
-        <input type="text" id="edit-measure" placeholder="Măsură">
-        <input type="number" id="edit-price" placeholder="Preț" step="0.1" required>
-        <input type="number" id="edit-stock" placeholder="Stoc" required>
-        <select id="edit-category" required></select>
-        <input type="file" id="edit-image" accept="image/*">
-        <button type="submit">Salvează Modificările</button>
-      </form>
+  adminContentDiv.innerHTML = `
+    <nav id="categories-nav"></nav>
+    <div id="search-bar-container">
+      <input type="text" id="search-bar" placeholder="Cauta produse...">
     </div>
-  </div>
-
-  <div id="add-modal" class="modal">
-    <div class="modal-content">
-      <span class="close-button">&times;</span>
-      <h2>Adaugă Produs</h2>
-      <form id="add-form">
-        <input type="text" id="add-name" placeholder="Nume" required>
-        <input type="number" id="add-quantity" placeholder="Cantitate" step="0.1" required>
-        <input type="text" id="add-measure" placeholder="Măsură">
-        <input type="number" id="add-price" placeholder="Preț" step="0.1" required>
-        <input type="number" id="add-stock" placeholder="Stoc" required>
-        <select id="add-category" required></select>
-        <input type="file" id="add-image" accept="image/*" required>
-        <button type="submit">Adaugă Produs</button>
-      </form>
+    <div id="add-product-button-container">
+      <button id="add-product-button">Adaugă un produs</button>
     </div>
-  </div>
-`;
+    <div id="products-list"></div>
 
+    <div id="edit-modal" class="modal">
+      <div class="modal-content">
+        <span class="close-button">&times;</span>
+        <h2>Modifică Produs</h2>
+        <form id="edit-form">
+          <input type="text" id="edit-name" placeholder="Nume" required>
+          <input type="number" id="edit-quantity" placeholder="Cantitate" step="0.1" required>
+          <input type="text" id="edit-measure" placeholder="Măsură">
+          <input type="number" id="edit-price" placeholder="Preț" step="0.1" required>
+          <input type="number" id="edit-stock" placeholder="Stoc" required>
+          <select id="edit-category" required></select>
+          <input type="file" id="edit-image" accept="image/*">
+          <button type="submit">Salvează Modificările</button>
+        </form>
+      </div>
+    </div>
 
-  // Adăugăm event listeners pentru checkbox-uri
+    <div id="add-modal" class="modal">
+      <div class="modal-content">
+        <span class="close-button">&times;</span>
+        <h2>Adaugă Produs</h2>
+        <form id="add-form">
+          <input type="text" id="add-name" placeholder="Nume" required>
+          <input type="number" id="add-quantity" placeholder="Cantitate" step="0.1" required>
+          <input type="text" id="add-measure" placeholder="Măsură">
+          <input type="number" id="add-price" placeholder="Preț" step="0.1" required>
+          <input type="number" id="add-stock" placeholder="Stoc" required>
+          <select id="add-category" required></select>
+          <input type="file" id="add-image" accept="image/*" required>
+          <button type="submit">Adaugă Produs</button>
+        </form>
+      </div>
+    </div>
+  `;
+
   updateCategoriesNav();
 
-  // Adăugăm event listener pentru search bar
   document.getElementById('search-bar').addEventListener('input', (e) => {
     searchTerm = e.target.value.toLowerCase();
     renderFilteredProducts();
   });
 
-  // Adăugăm event listener pentru close button al modalului
   document.querySelectorAll('.close-button').forEach(button => {
     button.addEventListener('click', () => {
       document.getElementById('edit-modal').style.display = 'none';
@@ -75,7 +72,6 @@ adminContentDiv.innerHTML = `
     });
   });
 
-  // Adăugăm event listener pentru submit form al modalului de editare
   document.getElementById('edit-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     const id = document.getElementById('edit-form').dataset.id;
@@ -90,7 +86,6 @@ adminContentDiv.innerHTML = `
     try {
       let imagePath = null;
       if (imageFile) {
-        // Încărcăm imaginea în Firebase Storage
         const imageRef = ref(storage, `productsImages/${imageFile.name}`);
         await uploadBytes(imageRef, imageFile);
         imagePath = await getDownloadURL(imageRef);
@@ -126,7 +121,6 @@ adminContentDiv.innerHTML = `
     }
   });
 
-  // Adăugăm event listener pentru submit form al modalului de adăugare
   document.getElementById('add-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     const name = document.getElementById('add-name').value;
@@ -147,12 +141,10 @@ adminContentDiv.innerHTML = `
         }
       }
   
-      // Încărcăm imaginea în Firebase Storage
       const imageRef = ref(storage, `productsImages/${imageFile.name}`);
       await uploadBytes(imageRef, imageFile);
       const imagePath = await getDownloadURL(imageRef);
   
-      // Adăugăm documentul în Firestore
       await addDoc(collection(db, 'products'), {
         name,
         quantity,
@@ -170,13 +162,11 @@ adminContentDiv.innerHTML = `
     }
   });
 
-  // Adăugăm event listener pentru butonul de adăugare
   document.getElementById('add-product-button').addEventListener('click', () => {
     updateCategorySelectOptions('add-category');
     document.getElementById('add-modal').style.display = 'block';
   });
 
-  // Inițial randăm toate produsele
   renderFilteredProducts();
 }
 
@@ -206,7 +196,6 @@ function updateCategoriesNav() {
     </label>
   `).join('');
 
-  // Reatașăm event listeners pentru noile checkbox-uri
   const categoryCheckboxes = document.querySelectorAll('.category-checkbox');
   categoryCheckboxes.forEach(checkbox => {
     checkbox.addEventListener('change', (e) => {
@@ -235,7 +224,6 @@ async function renderFilteredProducts() {
   const productsSnapshot = await getDocs(productsCollection);
   const products = productsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
-  // Filtrăm produsele în funcție de categorii și termenii de căutare
   const filteredProducts = products.filter(product => {
     const matchesCategory = selectedCategories.length
       ? selectedCategories.includes(product.category)
@@ -244,7 +232,6 @@ async function renderFilteredProducts() {
     return matchesCategory && matchesSearch;
   });
 
-  // Randăm produsele
   productsListDiv.innerHTML = filteredProducts.map(product => `
     <div class="product">
       <div class="product-image-container">
@@ -259,7 +246,6 @@ async function renderFilteredProducts() {
     </div>
   `).join('');
 
-  // Adăugăm event listeners pentru butoanele de modificare și ștergere
   document.querySelectorAll('.edit-button').forEach(button => {
     button.addEventListener('click', (e) => {
       const id = e.target.dataset.id;

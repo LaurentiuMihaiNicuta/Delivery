@@ -6,6 +6,7 @@ export function renderCourierLogoutButton() {
   const logoutButton = document.createElement('button');
   logoutButton.id = 'logout-button';
   logoutButton.textContent = 'Logout';
+  logoutButton.classList.add('fixed-logout-button');
 
   logoutButton.addEventListener('click', async () => {
     try {
