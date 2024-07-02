@@ -1,5 +1,3 @@
-//cart.js
-
 import { db, auth } from '../../firebase-config.js';
 import { collection, doc, getDoc, getDocs, updateDoc, addDoc, query, where, arrayRemove } from 'firebase/firestore';
 import { showAlert } from '../../alert.js';  // Importăm funcția showAlert
@@ -31,7 +29,7 @@ export async function renderCart() {
   const contentDiv = document.getElementById('content');
   contentDiv.innerHTML = `
     <div id="cart-container">
-      <h2>My Cart</h2>
+      <h2>Cosul tau</h2>
       <div id="cart-list">
         ${cartProducts.map(product => `
           <div class="cart-item">
@@ -42,9 +40,16 @@ export async function renderCart() {
               <h3>${product.name}</h3>
               <p>${product.quantity} ${product.measure ? product.measure : ''}</p>
               <p>Pret: ${product.price} RON</p>
-              <p>Ordered Quantity: ${product.orderedQuantity}</p>
+              <p>Numar bucati comandate: ${product.orderedQuantity}</p>
             </div>
-            <button class="remove-from-cart-button" data-id="${product.id}">Remove</button>
+            <div class="cart-actions">
+              <div class="cart-quantity-control">
+                <button class="quantity-minus" data-id="${product.id}">-</button>
+                <input type="number" class="cart-quantity-input" data-id="${product.id}" value="${product.orderedQuantity}" min="1" max="${product.stock}">
+                <button class="quantity-plus" data-id="${product.id}">+</button>
+              </div>
+              <button class="remove-from-cart-button" data-id="${product.id}">Elimina</button>
+            </div>
           </div>
         `).join('')}
       </div>
@@ -54,6 +59,54 @@ export async function renderCart() {
       <button id="place-order-button">Plaseaza Comanda</button>
     </div>
   `;
+
+  // Adăugăm event listeners pentru butoanele de incrementare și decrementare
+  document.querySelectorAll('.quantity-minus').forEach(button => {
+    button.addEventListener('click', async (e) => {
+      const productId = e.target.dataset.id;
+      const quantityInput = document.querySelector(`.cart-quantity-input[data-id="${productId}"]`);
+      let currentValue = parseInt(quantityInput.value);
+      if (currentValue > 1) {
+        await updateCartQuantity(productId, currentValue - 1);
+        renderCart();
+      }
+    });
+  });
+
+  document.querySelectorAll('.quantity-plus').forEach(button => {
+    button.addEventListener('click', async (e) => {
+      const productId = e.target.dataset.id;
+      const quantityInput = document.querySelector(`.cart-quantity-input[data-id="${productId}"]`);
+      let currentValue = parseInt(quantityInput.value);
+      const maxValue = parseInt(quantityInput.getAttribute('max'));
+      if (currentValue < maxValue) {
+        await updateCartQuantity(productId, currentValue + 1);
+        renderCart();
+      } else {
+        showAlert('Cantitatea dorită depășește stocul disponibil!', 'error');
+      }
+    });
+  });
+
+  // Adăugăm event listener pentru input-ul de cantitate
+  document.querySelectorAll('.cart-quantity-input').forEach(input => {
+    input.addEventListener('change', async (e) => {
+      const productId = e.target.dataset.id;
+      let newQuantity = parseInt(e.target.value);
+      const maxValue = parseInt(e.target.getAttribute('max'));
+      if (newQuantity > maxValue) {
+        showAlert('Cantitatea dorită depășește stocul disponibil!', 'error');
+        e.target.value = maxValue;
+        newQuantity = maxValue;
+      }
+      if (newQuantity < 1) {
+        e.target.value = 1;
+        newQuantity = 1;
+      }
+      await updateCartQuantity(productId, newQuantity);
+      renderCart();
+    });
+  });
 
   // Adăugăm event listeners pentru butoanele de eliminare din coș
   document.querySelectorAll('.remove-from-cart-button').forEach(button => {
@@ -132,6 +185,30 @@ async function removeFromCart(productId) {
   }
 
   showAlert('Product removed from cart!', 'success');
+}
+
+async function updateCartQuantity(productId, newQuantity) {
+  const user = auth.currentUser;
+  const cartRef = doc(db, 'carts', user.uid);
+  const cartDoc = await getDoc(cartRef);
+  const cartData = cartDoc.data();
+  const productInCart = cartData.products.find(product => product.id === productId);
+
+  if (productInCart) {
+    const productRef = doc(db, 'products', productId);
+    const productDoc = await getDoc(productRef);
+    const productData = productDoc.data();
+
+    if (newQuantity > productData.stock) {
+      showAlert(`Cantitatea dorită pentru produsul ${productData.name} depășește stocul disponibil!`, 'error');
+      return;
+    }
+
+    productInCart.quantity = newQuantity;
+    await updateDoc(cartRef, {
+      products: cartData.products
+    });
+  }
 }
 
 async function placeOrder(cartProducts) {

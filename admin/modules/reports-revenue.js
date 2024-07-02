@@ -6,8 +6,10 @@ export async function renderRevenueReport() {
   document.getElementById('report-result').innerHTML = `
     <div id="revenue-report-container">
       <h3>Venituri</h3>
-      <label for="date-select">Alege Data:</label>
-      <input type="date" id="date-select">
+      <label for="start-date-select">Alege Data de Început:</label>
+      <input type="date" id="start-date-select">
+      <label for="end-date-select">Alege Data de Sfârșit:</label>
+      <input type="date" id="end-date-select">
       <button id="generate-revenue-report-button">Generează Raport</button>
     </div>
     <div id="revenue-report-details">
@@ -22,17 +24,21 @@ export async function renderRevenueReport() {
 }
 
 async function generateRevenueReport() {
-  const date = document.getElementById('date-select').value;
+  const startDate = document.getElementById('start-date-select').value;
+  const endDate = document.getElementById('end-date-select').value;
 
-  if (!date) {
-    alert('Te rog să selectezi o dată.');
+  if (!startDate || !endDate) {
+    alert('Te rog să selectezi ambele date.');
     return;
   }
 
+  const startDateTime = new Date(`${startDate}T00:00:00`);
+  const endDateTime = new Date(`${endDate}T23:59:59`);
+
   const ordersSnapshot = await getDocs(query(
     collection(db, 'orders'),
-    where('createdAt', '>=', new Date(`${date}T00:00:00`)),
-    where('createdAt', '<=', new Date(`${date}T23:59:59`))
+    where('createdAt', '>=', startDateTime),
+    where('createdAt', '<=', endDateTime)
   ));
 
   const orders = ordersSnapshot.docs.map(doc => doc.data());
@@ -52,17 +58,17 @@ async function generateRevenueReport() {
     });
   });
 
-  renderRevenueReportDetails(date, totalRevenue, categoryRevenue);
+  renderRevenueReportDetails(startDate, endDate, totalRevenue, categoryRevenue);
 }
 
-function renderRevenueReportDetails(date, totalRevenue, categoryRevenue) {
+function renderRevenueReportDetails(startDate, endDate, totalRevenue, categoryRevenue) {
   document.getElementById('total-revenue').innerHTML = `
-    <p>Total venituri în ${date}: ${totalRevenue.toFixed(2)} RON</p>
+    <p>Total venituri fără TVA între ${startDate} și ${endDate}: ${totalRevenue.toFixed(2)} RON</p>
   `;
 
   document.getElementById('category-revenue-list').innerHTML = Object.keys(categoryRevenue).map(category => `
     <li>
-      <p>${category}: ${categoryRevenue[category].toFixed(2)} RON</p>
+      <p>${category}: ${categoryRevenue[category].toFixed(2)} RON (fără TVA)</p>
     </li>
   `).join('');
 }

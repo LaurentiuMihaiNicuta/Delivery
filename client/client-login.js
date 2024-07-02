@@ -1,5 +1,3 @@
-//client-login.js
-
 import '../styles/login.css';
 import { auth, db } from '../firebase-config.js';
 import { signInWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth';
@@ -10,7 +8,8 @@ import { renderClientMainPage } from './client-main.js';
 export function renderLogin() {
   const appDiv = document.getElementById('app');
   appDiv.innerHTML = `
-    <div id="login">
+    <div id="login-container">
+      <img src="LOGO2.PNG" alt="Logo" id="logo">
       <h2>Login</h2>
       <form id="login-form">
         <input type="email" id="email" placeholder="Email" required>
@@ -18,9 +17,12 @@ export function renderLogin() {
         <button type="submit">Login</button>
       </form>
       <div id="login-error"></div>
-      <button id="go-to-register">You don't have an account? Create one</button>
-      <button id="forgot-password">Forgot your password?</button>
+      <div id="login-buttons">
+        <button id="go-to-register">You don't have an account? Create one</button>
+        <button id="forgot-password">Forgot your password?</button>
+      </div>
     </div>
+    <div id ="login-second-div">Magazinul tau preferat acum si la tine acasa </da>
   `;
 
   document.getElementById('login-form').addEventListener('submit', async (e) => {

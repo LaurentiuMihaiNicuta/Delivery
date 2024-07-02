@@ -1,18 +1,60 @@
 #order-container {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 20px;
   height: 80vh;
+  padding: 20px;
 }
 
 #order-details,
 #chat-container {
-  flex: 0 0 45%;
-  background-color: #f9f9f9;
+  width: 100%;
+  background-color: #003355;
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  color: #ff5200; /* Culoarea textului */
+  text-align: center;
+}
+
+#order-details {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#order-items-container {
+  max-height: 200px;
+  overflow-y: auto;
+  width: 100%;
+  background-color: #ffffff;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 10px;
+  color: #003355;
+}
+
+.order-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+.order-item-image {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+#order-total {
+  margin-top: 10px;
+  font-weight: bold;
+  color: #ff5200;
 }
 
 #order-details h2 {
@@ -67,4 +109,26 @@
 
 #message-form button:hover {
   background-color: #45a049;
+}
+
+@media (min-width: 768px) {
+  #order-container {
+    flex-direction: row;
+  }
+
+  #order-details,
+  #chat-container {
+    width: 45%;
+  }
+}
+
+@media (max-width: 767px) {
+  #order-container {
+    flex-direction: column;
+  }
+
+  #order-details,
+  #chat-container {
+    width: 90%;
+  }
 }

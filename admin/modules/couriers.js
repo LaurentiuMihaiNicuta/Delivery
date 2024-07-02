@@ -1,5 +1,3 @@
-//couriers.js
-
 import { auth, db } from '../../firebase-config.js';
 import { collection, getDocs, doc, setDoc } from 'firebase/firestore';
 import { getFunctions, httpsCallable } from 'firebase/functions';
@@ -15,7 +13,7 @@ export async function renderCouriers() {
         <input type="email" id="courier-email" placeholder="Email" required>
         <input type="password" id="courier-password" placeholder="Parola" required>
         <input type="text" id="courier-phone" placeholder="Telefon" required>
-        <button type="submit">Adaugă Curier</button>
+        <button type="submit" id="add-courier-button">Adaugă Curier</button>
       </form>
       <h3>Lista Curieri</h3>
       <div id="courier-list"></div>
@@ -65,6 +63,12 @@ async function renderCourierList() {
       <p><strong>Email:</strong> ${courier.email}</p>
       <p><strong>Telefon:</strong> ${courier.phone}</p>
       <p><strong>Creat la:</strong> ${courier.createdAt.toDate().toLocaleDateString()}</p>
+      <p>
+        <strong>Status:</strong>
+        <span class="courier-status ${courier.free ? 'free' : 'busy'}">
+          ${courier.free ? 'Curierul nu livrează' : 'Curierul livrează acum'}
+        </span>
+      </p>
       <button class="delete-courier-button" data-id="${courier.id}">Șterge</button>
     </div>
   `).join('');

@@ -1,9 +1,7 @@
-//products.js
-
 import { db, auth } from '../../firebase-config.js';
 import { collection, getDocs, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import '/styles/client-styles/products.css';
-import { showAlert } from '../../alert.js'; // Asigură-te că ai importat showAlert
+import { showAlert } from '../../alert.js';
 
 let selectedCategories = [];
 let searchTerm = '';
@@ -95,6 +93,11 @@ async function renderFilteredProducts() {
       <p>${product.quantity} ${product.measure ? product.measure : ''}</p>
       <p>Pret: ${product.price} RON</p>
       ${product.stock > 0 ? `
+        <div class="quantity-control">
+          <button class="quantity-minus" data-id="${product.id}">-</button>
+          <input type="text" class="quantity-input" data-id="${product.id}" value="1" min="1" max="${product.stock}">
+          <button class="quantity-plus" data-id="${product.id}">+</button>
+        </div>
         <button class="add-to-cart-button" data-id="${product.id}">Adauga</button>
       ` : `
         <button class="out-of-stock-button" disabled>Indisponibil</button>
@@ -106,12 +109,47 @@ async function renderFilteredProducts() {
   document.querySelectorAll('.add-to-cart-button').forEach(button => {
     button.addEventListener('click', async (e) => {
       const productId = e.target.dataset.id;
-      await addToCart(productId);
+      const quantityInput = document.querySelector(`.quantity-input[data-id="${productId}"]`);
+      const quantity = parseInt(quantityInput.value);
+      await addToCart(productId, quantity);
+    });
+  });
+
+  // Adăugăm event listeners pentru butoanele de incrementare și decrementare
+  document.querySelectorAll('.quantity-minus').forEach(button => {
+    button.addEventListener('click', (e) => {
+      const productId = e.target.dataset.id;
+      const quantityInput = document.querySelector(`.quantity-input[data-id="${productId}"]`);
+      let currentValue = parseInt(quantityInput.value);
+      if (currentValue > 1) {
+        quantityInput.value = currentValue - 1;
+      }
+    });
+  });
+
+  document.querySelectorAll('.quantity-plus').forEach(button => {
+    button.addEventListener('click', (e) => {
+      const productId = e.target.dataset.id;
+      const quantityInput = document.querySelector(`.quantity-input[data-id="${productId}"]`);
+      let currentValue = parseInt(quantityInput.value);
+      const maxValue = parseInt(quantityInput.getAttribute('max'));
+      if (currentValue < maxValue) {
+        quantityInput.value = currentValue + 1;
+      }
     });
   });
 }
 
-async function addToCart(productId) {
+async function addToCart(productId, quantity) {
+  const productRef = doc(db, 'products', productId);
+  const productDoc = await getDoc(productRef);
+  const productData = productDoc.data();
+
+  if (quantity > productData.stock) {
+    showAlert(`Comanda cerută depășește stocul disponibil. Stoc disponibil: ${productData.stock}`, 'error');
+    return;
+  }
+
   const user = auth.currentUser;
   if (!user) {
     showAlert('Please log in to add products to your cart.', 'error');
@@ -124,15 +162,19 @@ async function addToCart(productId) {
 
   if (!cartDoc.exists()) {
     cartData = {
-      products: [{ id: productId, quantity: 1 }]
+      products: [{ id: productId, quantity }]
     };
     await setDoc(cartRef, cartData);
   } else {
     const productInCart = cartData.products.find(product => product.id === productId);
     if (productInCart) {
-      productInCart.quantity += 1;
+      if (productInCart.quantity + quantity > productData.stock) {
+        showAlert(`Comanda cerută depășește stocul disponibil. Stoc disponibil: ${productData.stock}`, 'error');
+        return;
+      }
+      productInCart.quantity += quantity;
     } else {
-      cartData.products.push({ id: productId, quantity: 1 });
+      cartData.products.push({ id: productId, quantity });
     }
     await updateDoc(cartRef, {
       products: cartData.products

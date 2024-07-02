@@ -1,14 +1,16 @@
 #courier-current-order {
     max-width: 800px;
+    min-width: 800px;
     margin: 20px auto;
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 5px;
     background-color: #f9f9f9;
+  
   }
   
   #courier-current-order h2 {
-    margin-bottom: 10px;
+    margin-bottom: 20px;
   }
   
   #courier-current-order p {
@@ -16,7 +18,7 @@
   }
   
   #update-status-button {
-    background-color: #4CAF50;
+    background-color: #ff5200;
     color: white;
     border: none;
     padding: 10px 20px;
@@ -25,5 +27,20 @@
   }
   
   #update-status-button:hover {
-    background-color: #45a049;
+    background-color: #ff5200;
+  }
+
+  @media (max-width: 768px){
+    #courier-current-order{
+      width: 10px;
+    }
+
+  }
+
+  @media (max-width: 460px){
+    #courier-current-order{
+     
+      width: 10px;
+    }
+
   }

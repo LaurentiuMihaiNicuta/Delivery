@@ -1,5 +1,5 @@
 import { db } from '../../firebase-config.js';
-import { collection, getDocs, query, where, getDoc, doc, Timestamp } from 'firebase/firestore';
+import { collection, getDocs, query, where, getDoc, doc } from 'firebase/firestore';
 import '../../styles/admin-styles/admin-reports-products.css';
 
 export function renderProductsReport() {
@@ -10,7 +10,10 @@ export function renderProductsReport() {
         <select id="categories-select">
           <option value="">Toate categoriile</option>
         </select>
-        <input type="date" id="date-select">
+        <label for="start-date-select">Alege Data de Început:</label>
+        <input type="date" id="start-date-select" min="2019-01-01" max="2030-12-31">
+        <label for="end-date-select">Alege Data de Sfârșit:</label>
+        <input type="date" id="end-date-select" min="2019-01-01" max="2030-12-31">
         <div id="products-buttons">
           <button id="most-sold-product-button">Cel mai vândut produs</button>
           <button id="least-sold-product-button">Cel mai puțin vândut produs</button>
@@ -89,14 +92,15 @@ function filterProductsByCategory() {
 }
 
 async function showMostSoldProduct() {
-  const selectedDate = document.getElementById('date-select').value;
-  if (!selectedDate) {
-    alert('Te rog să selectezi o dată.');
+  const startDate = document.getElementById('start-date-select').value;
+  const endDate = document.getElementById('end-date-select').value;
+  if (!startDate || !endDate) {
+    alert('Te rog să selectezi ambele date.');
     return;
   }
 
-  const startOfDay = new Date(`${selectedDate}T00:00:00`);
-  const endOfDay = new Date(`${selectedDate}T23:59:59`);
+  const startDateTime = new Date(`${startDate}T00:00:00`);
+  const endDateTime = new Date(`${endDate}T23:59:59`);
 
   const productsSnapshot = await getDocs(collection(db, 'products'));
   const products = productsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
@@ -107,8 +111,8 @@ async function showMostSoldProduct() {
   for (const product of products) {
     const ordersSnapshot = await getDocs(query(
       collection(db, 'orders'),
-      where('createdAt', '>=', startOfDay),
-      where('createdAt', '<=', endOfDay)
+      where('createdAt', '>=', startDateTime),
+      where('createdAt', '<=', endDateTime)
     ));
 
     const soldQuantity = ordersSnapshot.docs.reduce((total, orderDoc) => {
@@ -136,14 +140,15 @@ async function showMostSoldProduct() {
 }
 
 async function showLeastSoldProduct() {
-  const selectedDate = document.getElementById('date-select').value;
-  if (!selectedDate) {
-    alert('Te rog să selectezi o dată.');
+  const startDate = document.getElementById('start-date-select').value;
+  const endDate = document.getElementById('end-date-select').value;
+  if (!startDate || !endDate) {
+    alert('Te rog să selectezi ambele date.');
     return;
   }
 
-  const startOfDay = new Date(`${selectedDate}T00:00:00`);
-  const endOfDay = new Date(`${selectedDate}T23:59:59`);
+  const startDateTime = new Date(`${startDate}T00:00:00`);
+  const endDateTime = new Date(`${endDate}T23:59:59`);
 
   const productsSnapshot = await getDocs(collection(db, 'products'));
   const products = productsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
@@ -154,8 +159,8 @@ async function showLeastSoldProduct() {
   for (const product of products) {
     const ordersSnapshot = await getDocs(query(
       collection(db, 'orders'),
-      where('createdAt', '>=', startOfDay),
-      where('createdAt', '<=', endOfDay)
+      where('createdAt', '>=', startDateTime),
+      where('createdAt', '<=', endDateTime)
     ));
 
     const soldQuantity = ordersSnapshot.docs.reduce((total, orderDoc) => {
@@ -183,22 +188,23 @@ async function showLeastSoldProduct() {
 }
 
 async function generateProductReport(productId) {
-  const selectedDate = document.getElementById('date-select').value;
-  if (!selectedDate) {
-    alert('Te rog să selectezi o dată.');
+  const startDate = document.getElementById('start-date-select').value;
+  const endDate = document.getElementById('end-date-select').value;
+  if (!startDate || !endDate) {
+    alert('Te rog să selectezi ambele date.');
     return;
   }
 
-  const startOfDay = new Date(`${selectedDate}T00:00:00`);
-  const endOfDay = new Date(`${selectedDate}T23:59:59`);
+  const startDateTime = new Date(`${startDate}T00:00:00`);
+  const endDateTime = new Date(`${endDate}T23:59:59`);
 
   const productDoc = await getDoc(doc(db, 'products', productId));
   const product = productDoc.data();
 
   const ordersSnapshot = await getDocs(query(
     collection(db, 'orders'),
-    where('createdAt', '>=', startOfDay),
-    where('createdAt', '<=', endOfDay)
+    where('createdAt', '>=', startDateTime),
+    where('createdAt', '<=', endDateTime)
   ));
 
   const soldQuantity = ordersSnapshot.docs.reduce((total, orderDoc) => {
@@ -206,9 +212,6 @@ async function generateProductReport(productId) {
     const productInOrder = order.products.find(p => p.id === productId);
     return total + (productInOrder ? productInOrder.orderedQuantity : 0);
   }, 0);
-
-  console.log("Orders Snapshot:", ordersSnapshot.docs.map(doc => doc.data())); // Log pentru comenzi
-  console.log("Product in Orders:", ordersSnapshot.docs.map(doc => doc.data().products)); // Log pentru produse în comenzi
 
   const totalRevenue = ordersSnapshot.docs.reduce((total, orderDoc) => {
     const order = orderDoc.data();
@@ -221,7 +224,8 @@ async function generateProductReport(productId) {
     <p>Nume: ${product.name}</p>
     <p>Categorie: ${product.category}</p>
     <p>Preț: ${product.price} RON</p>
-    <p>Unități vândute în ${selectedDate}: ${soldQuantity}</p>
-    <p>Venituri generate în ${selectedDate}: ${totalRevenue.toFixed(2)} RON</p>
+    <p>Unități vândute între ${startDate} și ${endDate}: ${soldQuantity}</p>
+    <p>Venituri generate între ${startDate} și ${endDate}: ${totalRevenue.toFixed(2)} RON</p>
+    <p>Stock ramas: ${product.stock}</p>
   `;
 }

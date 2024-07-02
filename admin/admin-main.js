@@ -12,14 +12,15 @@ export function renderAdminMainPage() {
   const appDiv = document.getElementById('app');
   appDiv.innerHTML = `
     <nav class="admin-nav">
-      <ul>
-        <li><a href="#" id="admin-products-link">Gestionare Produse</a></li>
-        <li><a href="#" id="admin-couriers-link">Gestionare Curieri</a></li>
-        <li><a href="#" id="admin-orders-link">Comenzi</a></li>
-        <li><a href="#" id="admin-reports-link">Rapoarte</a></li>
-      </ul>
+      <img src="/public/LOGO2.png" alt="Logo" class="logo">
+      <div class="nav-links">
+        <a href="#" id="admin-products-link">Gestionare Produse</a>
+        <a href="#" id="admin-couriers-link">Gestionare Curieri</a>
+        <a href="#" id="admin-orders-link">Comenzi</a>
+        <a href="#" id="admin-reports-link">Rapoarte</a>
+      </div>
     </nav>
-    <div id="admin-content">
+    <div id="admin-content" style="padding-top: 70px;">
       <!-- Conținutul principal va fi aici -->
     </div>
     <button id="logout-button" class="fixed-logout-button">Logout</button>

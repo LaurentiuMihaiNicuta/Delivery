@@ -1,39 +1,95 @@
-
-/* main-page.css */
-/* admin.css */
-
 #app {
     height: 100vh;
-}
-
-nav {
-    background-color: rgb(255, 182, 80);
-    height: 5%;
-    height:50%;
-
-    
-}
-
-nav > ul > li > a {
-    background-color: #4CAF50;
+    padding-top: 60px; /* Adăugăm padding pentru a evita suprapunerea conținutului sub nav bar */
+  }
+  
+  .client-nav {
+    background-color: #ff5200;
+    height: 70px; /* Ajustăm înălțimea nav bar-ului */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+  }
+  
+  .client-nav .logo {
+    height: 40px; /* Ajustăm dimensiunea logo-ului */
+  }
+  
+  .client-nav .nav-links {
+    display: flex;
+    gap: 20px;
+  }
+  
+  .client-nav .nav-links a {
+    display: flex;
+    align-items: center;
+    background-color: #003355;
     padding: 10px;
     border-radius: 6px;
-    color:white;
-}
-
-ul {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    height: 100%;
-    list-style-type: none;
-}
-
-#cart-link {
-    transition: background-color 0.3s;
-}
-
-nav a {
+    color: #fbfffd;
     text-decoration: none; /* Elimină sublinierea */
-    color: inherit; /* Păstrează culoarea moștenită */
-}
+    font-size: 100%;
+  }
+  
+  .client-nav .nav-links a:hover {
+    background-color: #ff5200;
+    color: #003355;
+  }
+  
+  .client-nav .nav-icon {
+    width: 20px; /* Ajustăm dimensiunea iconițelor */
+    height: 20px;
+    margin-right: 8px; /* Spațiu între iconiță și text */
+  }
+  
+  .fixed-logout-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .fixed-logout-button:hover {
+    background-color: #45a049;
+  }
+  
+  /* Media queries for responsiveness */
+  @media (max-width: 768px) {
+    .client-nav {
+      flex-direction: column;
+      height: auto;
+    }
+    .client-nav .nav-links {
+      flex-direction: column;
+      width: 100%;
+      gap: 5px;
+    }
+    .client-nav .nav-links a {
+      width: 100%;
+      text-align: center;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .client-nav {
+      padding: 0px;
+    }
+    .client-nav .nav-links {
+      gap: 5px;
+    }
+    .client-nav .nav-links a {
+      font-size: 90%;
+    }
+  }
+  

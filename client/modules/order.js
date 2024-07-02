@@ -1,4 +1,3 @@
-//order.js import { db, auth } from '../../firebase-config.js';
 import { db, auth } from '../../firebase-config.js';
 import { collection, doc, getDoc, getDocs, query, where, orderBy, limit } from 'firebase/firestore';
 import { renderClientChat } from './client-chat.js'; // Importăm funcția de randare a chatului
@@ -55,12 +54,25 @@ export async function renderOrder() {
     return;
   }
 
+  let totalAmount = orderData.products.reduce((total, product) => total + (product.orderedQuantity * product.price), 0).toFixed(2);
+
   contentDiv.innerHTML = `
     <div id="order-container">
       <div id="order-details">
         <h2>Comanda ta este pe drum!</h2>
         <p>Curierul tau este ${courierData ? courierData.name : 'Unknown'}</p>
         <p>Status: ${orderStatusMessage}</p>
+        <div id="order-items-container">
+          ${orderData.products.map(product => `
+            <div class="order-item">
+              <img src="${product.imagePath}" alt="${product.name}" class="order-item-image">
+              <p>${product.name} - ${product.orderedQuantity} x ${product.price} RON = ${(product.orderedQuantity * product.price).toFixed(2)} RON</p>
+            </div>
+          `).join('')}
+        </div>
+        <div id="order-total">
+          <p>Total: ${totalAmount} RON</p>
+        </div>
       </div>
       <div id="chat-container"></div> <!-- Container pentru chat -->
     </div>

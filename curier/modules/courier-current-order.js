@@ -1,9 +1,8 @@
-//courier-current-order.js
-
 import { db, auth } from '../../firebase-config.js';
 import { doc, getDoc, updateDoc, query, where, collection, getDocs } from 'firebase/firestore';
 import '/styles/courier-current-order.css';
 import { renderCourierChat } from './courier-chat.js';
+import { renderCourierOrderList } from './courier-order-list.js'; // Importă funcția de render pentru lista de comenzi
 
 export async function renderCourierCurrentOrder() {
   const user = auth.currentUser;
@@ -23,9 +22,8 @@ export async function renderCourierCurrentOrder() {
   const contentDiv = document.getElementById('courier-main');
 
   if (ordersSnapshot.empty) {
-    contentDiv.innerHTML = `
-      <h2>Nu ai nicio comanda momentan!</h2>
-    `;
+    contentDiv.innerHTML = `<h2>Nu ai nicio comanda momentan!</h2>`;
+    await renderCourierOrderList(); // Render the order list when there are no current orders
     return;
   }
 
@@ -34,13 +32,13 @@ export async function renderCourierCurrentOrder() {
 
   const customerRef = doc(db, 'users', orderData.userId);
   const customerDoc = await getDoc(customerRef);
-  const customerData = customerDoc.data();
+  const customerData = customerDoc.exists() ? customerDoc.data() : {};
 
   contentDiv.innerHTML = `
     <div id="courier-current-order">
       <h2>Current Order</h2>
       <p>Ai de livrat la adresa aceasta: ${orderData.address || 'Address not available'}</p>
-      <p>Numele clientului este: ${customerData ? customerData.name : 'Unknown'}</p>
+      <p>Numele clientului este: ${customerData.name || 'Unknown'}</p>
       <p>Status: ${orderData.status}</p>
       <button id="update-status-button">Update Status</button>
     </div>

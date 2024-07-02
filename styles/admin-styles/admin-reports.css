@@ -1,75 +1,89 @@
 /* admin-reports.css */
 
-/* admin-reports.css */
-
-/* admin-reports.css */
-
 #reports-container {
-    display: flex;
-    height: 100vh;
-  }
-  
-  #reports-sidebar {
-    width: 20%;
-    background-color: #f4f4f4;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  
-  }
-  
-  #reports-sidebar h3 {
-    margin-bottom: 20px;
-  }
-  
-  #reports-sidebar ul {
-    list-style-type: none;
-    padding: 0;
-    width: 100%;
-  }
-  
-  #reports-sidebar ul li {
-    margin-bottom: 10px;
-    width: 100%;
-  }
-  
-  #reports-sidebar ul li a {
-    display: block;
-    width: 25%;
-    padding: 10px;
-    background-color: #4CAF50;
-    color: white;
-    text-align: center;
-    text-decoration: none;
-    border-radius: 5px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  
-  #reports-sidebar ul li a:hover {
-    background-color: #45a049;
-  }
-  
-  #report-content {
-    width: 80%;
-    padding: 20px;
-    overflow-y: auto;
-  }
-  
-  #report-content h2 {
-    margin-bottom: 20px;
-  }
-  
-  #report-result {
-    margin-top: 20px;
-  }
-  
-#reports-ul{
-   
-    display: flex;
-    flex-direction: column;
-
+  display: flex;
+  height: 100vh;
 }
 
+#reports-sidebar {
+  width: 20%;
+  background-color: #f4f4f4;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
+#reports-sidebar h3 {
+  margin-bottom: 20px;
+}
+
+#reports-sidebar ul {
+  list-style-type: none;
+  padding: 0;
+  width: 100%;
+}
+
+#reports-sidebar ul li {
+  margin-bottom: 5px; /* Mai puțin spațiu între butoane */
+  width: 100%;
+}
+
+#reports-sidebar ul li a {
+  display: block;
+  width: 80%; /* Mai mare pentru a se potrivi mai bine */
+  padding: 10px;
+  background-color: #003355;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 5px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#reports-sidebar ul li a:hover {
+  background-color: #04536c;
+}
+
+#report-content {
+  width: 80%;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+#report-content h2 {
+  margin-bottom: 20px;
+}
+
+#report-result {
+  margin-top: 20px;
+}
+
+#reports-ul {
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 768px) {
+  #reports-container {
+    flex-direction: column;
+    height: auto;
+  }
+
+  #reports-sidebar {
+    width: 100%;
+    order: 1;
+    padding: 10px 0;
+  }
+
+  #report-content {
+    width: 100%;
+    order: 2;
+    padding: 10px;
+  }
+
+  #reports-sidebar ul li a {
+    width: 90%;
+  }
+}

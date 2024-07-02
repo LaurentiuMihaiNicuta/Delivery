@@ -1,4 +1,4 @@
-import '../styles/login.css';
+import '../styles/courier-login.css';
 import { auth, db } from '../firebase-config.js';
 import { signInWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';

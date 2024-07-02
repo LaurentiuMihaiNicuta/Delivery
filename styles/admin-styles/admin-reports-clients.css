@@ -1,78 +1,98 @@
 #clients-report-container {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    padding: 20px;
-  }
-  
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+}
+
+#clients-report-controls {
+  display: flex;
+  flex-wrap: wrap; /* Permite trecerea pe mai multe rânduri */
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 10px; /* Adaugă spațiu între elemente */
+}
+
+#search-client-input {
+  padding: 10px;
+  font-size: 16px;
+  width: 200px;
+}
+
+#clients-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+#clients-buttons button {
+  padding: 10px 20px;
+  background-color: #003355;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  min-width: 200px; /* Fixează lățimea minimă */
+  text-align: center;
+}
+
+#clients-buttons button:hover {
+  background-color: #04536c;
+}
+
+#clients-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 20px;
+  overflow-y: auto;
+  max-height: 60vh;
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.client-card {
+  background-color: #fff;
+  padding: 20px;
+  border: 1px solid #faeeee;
+  border-radius: 5px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  height: 40px;
+  width: 150px;
+}
+
+.client-card:hover {
+  background-color: #f0f0f0;
+}
+
+.client-card p {
+  margin: 5px 0;
+}
+
+#client-report-details {
+  background-color: #f4f4f4;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 768px) {
   #clients-report-controls {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-  }
-  
-  #search-client-input {
-    padding: 10px;
-    font-size: 16px;
-    width: 200px;
-  }
-  
-  #clients-buttons {
-    display: flex;
-    gap: 10px;
-  }
-  
-  #clients-buttons button {
-    padding: 10px 20px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  #clients-buttons button:hover {
-    background-color: #45a049;
-  }
-  
-  #clients-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 20px;
-    overflow-y: auto;
-    max-height: 60vh; /* Ajustăm înălțimea maximă a gridului */
-    background-color: #f9f9f9;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  .client-card {
-    background-color: #fff;
-    padding: 20px;
-    border: 1px solid #faeeee;
-    border-radius: 5px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-    display: flex;
     flex-direction: column;
-    align-items: center;
-    cursor: pointer;
-    height: 40px; /* Înălțime fixă pentru elementele din grid */
-    width: 150px; /* Lățime fixă pentru elementele din grid */
+    align-items: stretch;
   }
-  
-  .client-card:hover {
-    background-color: #f0f0f0;
+
+  #clients-buttons {
+    flex-direction: column;
+    align-items: stretch;
   }
-  
-  .client-card p {
-    margin: 5px 0;
+
+  #clients-buttons button {
+    width: 100%;
   }
-  
-  #client-report-details {
-    background-color: #f4f4f4;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
+}

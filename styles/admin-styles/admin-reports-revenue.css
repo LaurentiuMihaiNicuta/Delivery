@@ -1,52 +1,78 @@
 #revenue-report-container {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-bottom: 20px;
-  }
-  
-  #revenue-report-details {
-    background-color: #f9f9f9;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  #revenue-report-details h3 {
-    margin-bottom: 10px;
-  }
-  
-  #revenue-report-details p {
-    margin: 5px 0;
-  }
-  
-  #category-revenue-list {
-    margin-top: 20px;
-  }
-  
-  #category-revenue-list li {
-    background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+#revenue-report-details {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#revenue-report-details h3 {
+  margin-bottom: 10px;
+}
+
+#revenue-report-details p {
+  margin: 5px 0;
+}
+
+#category-revenue-list {
+  margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+#category-revenue-list li {
+  background-color: #fff;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #faeeee;
+  border-radius: 5px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#category-revenue-list p {
+  margin: 5px 0;
+}
+
+#generate-revenue-report-button {
+  background-color: #003355;
+  color: rgb(255, 255, 255);
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#generate-revenue-report-button:hover {
+  background-color: #04536c;
+}
+
+@media (max-width: 768px) {
+  #revenue-report-container {
     padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #faeeee;
-    border-radius: 5px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
   }
-  
-  #category-revenue-list p {
-    margin: 5px 0;
+
+  #revenue-report-details {
+    padding: 10px;
   }
-  
-  #generate-revenue-report-button {
-    background-color: #4CAF50;
-    color: rgb(255, 255, 255);
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+
+  #category-revenue-list {
+    flex-direction: column;
   }
-  
-  #generate-revenue-report-button:hover {
-    background-color: #45a049;
+
+  #category-revenue-list li {
+    width: 100%;
+    padding: 10px;
   }
-  
+}

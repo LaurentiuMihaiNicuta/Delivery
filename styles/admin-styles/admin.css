@@ -2,31 +2,44 @@
 
 #app {
     height: 100vh;
+    padding-top: 60px; /* Adăugăm padding pentru a evita suprapunerea conținutului sub nav bar */
 }
 
 .admin-nav {
-    background-color: rgb(255, 182, 80);
-    height: 5%;
-}
-
-.admin-nav ul {
+    background-color: #ff5200;
+    height: 70px; /* Ajustăm înălțimea nav bar-ului */
     display: flex;
-    justify-content: space-around;
     align-items: center;
-    height: 100%;
-    list-style-type: none;
+    justify-content: space-between;
+    padding: 0 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
 }
 
-.admin-nav ul li a {
-    background-color: #4CAF50;
+.admin-nav .logo {
+    height: 40px; /* Ajustăm dimensiunea logo-ului */
+}
+
+.admin-nav .nav-links {
+    display: flex;
+    gap: 20px;
+}
+
+.admin-nav .nav-links a {
+    background-color: #003355;
     padding: 10px;
     border-radius: 6px;
-    color: white;
+    color: #fbfffd;
     text-decoration: none; /* Elimină sublinierea */
+    font-size: 100%;
 }
 
-.admin-nav ul li a:hover {
-    background-color: #45a049;
+.admin-nav .nav-links a:hover {
+    background-color: #ff5200;
+    color: #003355;
 }
 
 .fixed-logout-button {
@@ -43,4 +56,34 @@
 
 .fixed-logout-button:hover {
     background-color: #45a049;
+}
+
+/* Media queries for responsiveness */
+@media (max-width: 768px) {
+    .admin-nav {
+        flex-direction: column;
+        height: auto;
+    }
+    .admin-nav .nav-links {
+        flex-direction: column;
+        width: 100%;
+        gap: 5px;
+    }
+    .admin-nav .nav-links a {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .admin-nav {
+        padding: 0px;
+    }
+    .admin-nav .nav-links {
+        gap: 5px;
+    }
+    .admin-nav .nav-links a {
+        
+        font-size: 90%;
+    }
 }

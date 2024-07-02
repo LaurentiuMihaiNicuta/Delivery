@@ -26,7 +26,7 @@
   }
   
   .message.courier {
-    background-color: #b2f0b2; /* Verde pastel */
+    background-color:   #163d58; /* Verde pastel */
     padding: 10px;
     border-radius: 10px;
     margin-bottom: 10px;
@@ -50,7 +50,7 @@
   
   #client-message-form button {
     padding: 10px;
-    background-color: #4CAF50;
+    background-color:  #ff5200;
     color: white;
     border: none;
     cursor: pointer;
@@ -58,6 +58,6 @@
   }
   
   #client-message-form button:hover {
-    background-color: #45a049;
+    background-color: #ff5200;
   }
   

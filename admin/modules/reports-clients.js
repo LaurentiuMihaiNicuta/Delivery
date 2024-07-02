@@ -7,7 +7,10 @@ export function renderClientsReport() {
     <div id="clients-report-container">
       <div id="clients-report-controls">
         <input type="text" id="search-client-input" placeholder="Caută client...">
-        <input type="date" id="date-select">
+        <label for="start-date-select">Alege Data de Început:</label>
+        <input type="date" id="start-date-select" min="2019-01-01" max="2030-12-31">
+        <label for="end-date-select">Alege Data de Sfârșit:</label>
+        <input type="date" id="end-date-select" min="2019-01-01" max="2030-12-31">
         <div id="clients-buttons">
           <button id="most-active-client-button">Cel mai activ client</button>
           <button id="least-active-client-button">Cel mai neactiv client</button>
@@ -107,16 +110,22 @@ async function generateClientReport(clientId) {
   const clientDoc = await getDoc(doc(db, 'users', clientId));
   const client = clientDoc.data();
 
-  const selectedDate = document.getElementById('date-select').value;
-  const date = selectedDate ? new Date(selectedDate) : new Date();
-  const startOfDay = new Date(date.setHours(0, 0, 0, 0));
-  const endOfDay = new Date(date.setHours(23, 59, 59, 999));
+  const startDate = document.getElementById('start-date-select').value;
+  const endDate = document.getElementById('end-date-select').value;
+
+  if (!startDate || !endDate) {
+    alert('Te rog să selectezi ambele date.');
+    return;
+  }
+
+  const startDateTime = new Date(`${startDate}T00:00:00`);
+  const endDateTime = new Date(`${endDate}T23:59:59`);
 
   const ordersSnapshot = await getDocs(query(
     collection(db, 'orders'),
     where('userId', '==', clientId),
-    where('createdAt', '>=', startOfDay),
-    where('createdAt', '<=', endOfDay)
+    where('createdAt', '>=', startDateTime),
+    where('createdAt', '<=', endDateTime)
   ));
 
   const orders = ordersSnapshot.docs.map(doc => doc.data());
@@ -124,13 +133,32 @@ async function generateClientReport(clientId) {
     return total + order.products.reduce((sum, product) => sum + (Number(product.price) * product.orderedQuantity), 0);
   }, 0);
 
+  let mostOrderedProduct = null;
+  let maxOrderedQuantity = 0;
+  const productQuantities = {};
+
+  orders.forEach(order => {
+    order.products.forEach(product => {
+      if (!productQuantities[product.name]) {
+        productQuantities[product.name] = 0;
+      }
+      productQuantities[product.name] += product.orderedQuantity;
+
+      if (productQuantities[product.name] > maxOrderedQuantity) {
+        mostOrderedProduct = product.name;
+        maxOrderedQuantity = productQuantities[product.name];
+      }
+    });
+  });
+
   document.getElementById('client-report-details').innerHTML = `
     <h3>Detalii Client</h3>
     <p>Nume: ${client.name}</p>
     <p>Email: ${client.email}</p>
     <p>Adresă: ${client.address}</p>
     <p>Telefon: ${client.phone}</p>
-    <p>Număr comenzi în ${selectedDate}: ${orders.length}</p>
-    <p>Suma cheltuită în ${selectedDate}: ${totalSpent.toFixed(2)} RON</p>
+    <p>Număr comenzi între ${startDate} și ${endDate}: ${orders.length}</p>
+    <p>Suma cheltuită între ${startDate} și ${endDate}: ${totalSpent.toFixed(2)} RON</p>
+    <p>Cel mai comandat produs: ${mostOrderedProduct} (${maxOrderedQuantity} unități)</p>
   `;
 }
