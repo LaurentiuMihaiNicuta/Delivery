@@ -1,3 +1,5 @@
+//orders.js
+
 import { db } from '../../firebase-config.js';
 import { collection, getDocs, getDoc, doc, query, where } from 'firebase/firestore';
 import '../../styles/admin-styles/admin-order.css';
@@ -9,10 +11,10 @@ export async function renderOrders() {
   const adminContentDiv = document.getElementById('admin-content');
   adminContentDiv.innerHTML = `
     <div id="orders-filters">
-      <label for="client-search-bar">Search by Client Name:</label>
-      <input type="text" id="client-search-bar" placeholder="Search by client...">
-      <label for="courier-search-bar">Search by Courier Name:</label>
-      <input type="text" id="courier-search-bar" placeholder="Search by courier...">
+      <label for="client-search-bar">Cauta dupa nume Client:</label>
+      <input type="text" id="client-search-bar" placeholder="...">
+      <label for="courier-search-bar">Cauta dupa nume Curier:</label>
+      <input type="text" id="courier-search-bar" placeholder="...">
       <label for="date-filter">Filter by Date:</label>
       <input type="date" id="date-filter">
     </div>

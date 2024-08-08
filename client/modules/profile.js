@@ -16,8 +16,8 @@ export async function renderProfile() {
 
   contentDiv.innerHTML = `
     <div id="profile-nav">
-      <button id="settings-button">Setari</button>
-      <button id="order-history-button">Istoric comenzi</button>
+      <button id="settings-button" class="profile-nav-button">Setari</button>
+      <button id="order-history-button" class="profile-nav-button">Istoric comenzi</button>
     </div>
     <div id="profile-content"></div>
   `;

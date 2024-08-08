@@ -1,6 +1,8 @@
 import { db } from '../../firebase-config.js';
 import { collection, getDocs, query, where, getDoc, doc } from 'firebase/firestore';
 import '../../styles/admin-styles/admin-reports-clients.css';
+import { showAlert } from '../../alert.js';
+import { showConfirm } from '../../confirm.js';
 
 export function renderClientsReport() {
   document.getElementById('report-result').innerHTML = `
@@ -71,7 +73,7 @@ async function showMostActiveClient() {
 
   for (const client of clients) {
     const ordersSnapshot = await getDocs(query(collection(db, 'orders'), where('userId', '==', client.id)));
-    const ordersCount = ordersSnapshot.size;
+    const ordersCount = ordersSnapshot.docs.filter(order => order.data().status !== 'cancelled').length;
 
     if (ordersCount > maxOrders) {
       mostActiveClient = client;
@@ -93,7 +95,7 @@ async function showLeastActiveClient() {
 
   for (const client of clients) {
     const ordersSnapshot = await getDocs(query(collection(db, 'orders'), where('userId', '==', client.id)));
-    const ordersCount = ordersSnapshot.size;
+    const ordersCount = ordersSnapshot.docs.filter(order => order.data().status !== 'cancelled').length;
 
     if (ordersCount < minOrders) {
       leastActiveClient = client;
@@ -114,7 +116,7 @@ async function generateClientReport(clientId) {
   const endDate = document.getElementById('end-date-select').value;
 
   if (!startDate || !endDate) {
-    alert('Te rog să selectezi ambele date.');
+    showAlert('Te rog să selectezi ambele date.', 'error');
     return;
   }
 
@@ -128,7 +130,7 @@ async function generateClientReport(clientId) {
     where('createdAt', '<=', endDateTime)
   ));
 
-  const orders = ordersSnapshot.docs.map(doc => doc.data());
+  const orders = ordersSnapshot.docs.map(doc => doc.data()).filter(order => order.status !== 'cancelled');
   const totalSpent = orders.reduce((total, order) => {
     return total + order.products.reduce((sum, product) => sum + (Number(product.price) * product.orderedQuantity), 0);
   }, 0);

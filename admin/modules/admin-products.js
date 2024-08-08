@@ -2,6 +2,7 @@ import '../../styles/admin-styles/admin-products.css';
 import { db, storage } from '../../firebase-config.js'; 
 import { collection, getDocs, doc, updateDoc, addDoc, deleteDoc, setDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
+import { showConfirm } from '../../confirm.js'; // Importăm funcția showConfirm
 
 let selectedCategories = [];
 let searchTerm = '';
@@ -264,7 +265,8 @@ async function renderFilteredProducts() {
       const id = e.target.dataset.id;
       const imagePath = e.target.dataset.imagePath;
 
-      if (confirm('Ești sigur că vrei să ștergi acest produs?')) {
+      const confirm = await showConfirm('Ești sigur că vrei să ștergi acest produs?');
+      if (confirm) {
         try {
           await deleteDoc(doc(db, 'products', id));
           const imageRef = ref(storage, imagePath);

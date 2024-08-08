@@ -2,6 +2,8 @@ import { auth, db } from '../../firebase-config.js';
 import { collection, getDocs, doc, setDoc } from 'firebase/firestore';
 import { getFunctions, httpsCallable } from 'firebase/functions';
 import '../../styles/admin-styles/admin-couriers.css';
+import { showAlert } from '../../alert.js';
+import { showConfirm } from '../../confirm.js';
 
 export async function renderCouriers() {
   const adminContentDiv = document.getElementById('admin-content');
@@ -27,6 +29,11 @@ export async function renderCouriers() {
     const password = document.getElementById('courier-password').value;
     const phone = document.getElementById('courier-phone').value;
 
+    if (!isValidPhoneNumber(phone)) {
+      showAlert('Numărul de telefon este invalid. Te rog să introduci un număr valid.', 'error');
+      return;
+    }
+
     try {
       const response = await fetch('https://us-central1-licentanicutalaurentiu.cloudfunctions.net/createCourier', {
         method: 'POST',
@@ -37,7 +44,7 @@ export async function renderCouriers() {
       });
 
       if (response.ok) {
-        alert('Curier adăugat cu succes');
+        showAlert('Curier adăugat cu succes', 'success');
         renderCourierList();
       } else {
         const errorData = await response.json();
@@ -45,12 +52,13 @@ export async function renderCouriers() {
       }
     } catch (error) {
       console.error('Error adding courier:', error);
-      alert('Eroare la adăugarea curierului: ' + error.message);
+      showAlert('Eroare la adăugarea curierului: ' + error.message, 'error');
     }
   });
 
   await renderCourierList();
 }
+
 
 async function renderCourierList() {
   const courierList = document.getElementById('courier-list');
@@ -76,7 +84,8 @@ async function renderCourierList() {
   document.querySelectorAll('.delete-courier-button').forEach(button => {
     button.addEventListener('click', async (e) => {
       const courierId = e.target.dataset.id;
-      if (confirm('Ești sigur că vrei să ștergi acest curier?')) {
+      const confirm = await showConfirm('Ești sigur că vrei să ștergi acest curier?');
+      if (confirm) {
         try {
           const functions = getFunctions();
           const deleteCourier = httpsCallable(functions, 'deleteCourier');
@@ -84,9 +93,14 @@ async function renderCourierList() {
           renderCourierList();
         } catch (error) {
           console.error('Error deleting courier:', error);
-          alert('Eroare la ștergerea curierului: ' + error.message);
+          showAlert('Eroare la ștergerea curierului: ' + error.message, 'error');
         }
       }
     });
   });
+}
+
+function isValidPhoneNumber(phone) {
+  const phoneRegex = /^[0-9]{10,15}$/; // Modifică regex-ul după cum e necesar
+  return phoneRegex.test(phone);
 }

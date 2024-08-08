@@ -17,7 +17,7 @@
     margin: 5px 0;
   }
   
-  #update-status-button {
+  #update-status-button, #cancel-order-button {
     background-color: #ff5200;
     color: white;
     border: none;
@@ -26,6 +26,9 @@
     border-radius: 5px;
   }
   
+  #cancel-order-button{
+    background-color: #003355;
+  }
   #update-status-button:hover {
     background-color: #ff5200;
   }

@@ -1,6 +1,9 @@
 import { db } from '../../firebase-config.js';
 import { collection, getDocs, query, where, getDoc, doc } from 'firebase/firestore';
 import '../../styles/admin-styles/admin-reports-products.css';
+import { showAlert } from '../../alert.js';
+import { showConfirm } from '../../confirm.js';
+
 
 export function renderProductsReport() {
   document.getElementById('report-result').innerHTML = `
@@ -95,7 +98,7 @@ async function showMostSoldProduct() {
   const startDate = document.getElementById('start-date-select').value;
   const endDate = document.getElementById('end-date-select').value;
   if (!startDate || !endDate) {
-    alert('Te rog să selectezi ambele date.');
+    showAlert('Te rog să selectezi ambele date.', 'error');
     return;
   }
 
@@ -112,7 +115,8 @@ async function showMostSoldProduct() {
     const ordersSnapshot = await getDocs(query(
       collection(db, 'orders'),
       where('createdAt', '>=', startDateTime),
-      where('createdAt', '<=', endDateTime)
+      where('createdAt', '<=', endDateTime),
+      where('status', '!=', 'cancelled') // Exclude cancelled orders
     ));
 
     const soldQuantity = ordersSnapshot.docs.reduce((total, orderDoc) => {
@@ -143,7 +147,7 @@ async function showLeastSoldProduct() {
   const startDate = document.getElementById('start-date-select').value;
   const endDate = document.getElementById('end-date-select').value;
   if (!startDate || !endDate) {
-    alert('Te rog să selectezi ambele date.');
+    showAlert('Te rog să selectezi ambele date.', 'error');
     return;
   }
 
@@ -160,7 +164,8 @@ async function showLeastSoldProduct() {
     const ordersSnapshot = await getDocs(query(
       collection(db, 'orders'),
       where('createdAt', '>=', startDateTime),
-      where('createdAt', '<=', endDateTime)
+      where('createdAt', '<=', endDateTime),
+      where('status', '!=', 'cancelled') // Exclude cancelled orders
     ));
 
     const soldQuantity = ordersSnapshot.docs.reduce((total, orderDoc) => {
@@ -191,7 +196,7 @@ async function generateProductReport(productId) {
   const startDate = document.getElementById('start-date-select').value;
   const endDate = document.getElementById('end-date-select').value;
   if (!startDate || !endDate) {
-    alert('Te rog să selectezi ambele date.');
+    showAlert('Te rog să selectezi ambele date.', 'error');
     return;
   }
 
@@ -204,7 +209,8 @@ async function generateProductReport(productId) {
   const ordersSnapshot = await getDocs(query(
     collection(db, 'orders'),
     where('createdAt', '>=', startDateTime),
-    where('createdAt', '<=', endDateTime)
+    where('createdAt', '<=', endDateTime),
+    where('status', '!=', 'cancelled') // Exclude cancelled orders
   ));
 
   const soldQuantity = ordersSnapshot.docs.reduce((total, orderDoc) => {

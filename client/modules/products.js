@@ -1,3 +1,5 @@
+// client/modules/products.js
+
 import { db, auth } from '../../firebase-config.js';
 import { collection, getDocs, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import '/styles/client-styles/products.css';
@@ -8,7 +10,7 @@ let searchTerm = '';
 let allCategories = [];
 
 export async function renderProducts() {
-  await loadCategories(); // Load categories before rendering the UI
+  await loadCategories();
 
   const contentDiv = document.getElementById('content');
   contentDiv.innerHTML = `
@@ -25,7 +27,6 @@ export async function renderProducts() {
     <div id="products-list"></div>
   `;
 
-  // Adăugăm event listeners pentru checkbox-uri
   const categoryCheckboxes = document.querySelectorAll('.category-checkbox');
   categoryCheckboxes.forEach(checkbox => {
     checkbox.addEventListener('change', (e) => {
@@ -40,13 +41,11 @@ export async function renderProducts() {
     });
   });
 
-  // Adăugăm event listener pentru search bar
   document.getElementById('search-bar').addEventListener('input', (e) => {
     searchTerm = e.target.value.toLowerCase();
     renderFilteredProducts();
   });
 
-  // Inițial randăm toate produsele
   renderFilteredProducts();
 }
 
@@ -74,7 +73,6 @@ async function renderFilteredProducts() {
   const productsSnapshot = await getDocs(productsCollection);
   const products = productsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
-  // Filtrăm produsele în funcție de categorii și termenii de căutare
   const filteredProducts = products.filter(product => {
     const matchesCategory = selectedCategories.length
       ? selectedCategories.includes(product.category)
@@ -83,7 +81,6 @@ async function renderFilteredProducts() {
     return matchesCategory && matchesSearch;
   });
 
-  // Randăm produsele
   productsListDiv.innerHTML = filteredProducts.map(product => `
     <div class="product">
       <div class="product-image-container">
@@ -105,7 +102,6 @@ async function renderFilteredProducts() {
     </div>
   `).join('');
 
-  // Adăugăm event listeners pentru butoanele de adăugare în coș
   document.querySelectorAll('.add-to-cart-button').forEach(button => {
     button.addEventListener('click', async (e) => {
       const productId = e.target.dataset.id;
@@ -115,7 +111,6 @@ async function renderFilteredProducts() {
     });
   });
 
-  // Adăugăm event listeners pentru butoanele de incrementare și decrementare
   document.querySelectorAll('.quantity-minus').forEach(button => {
     button.addEventListener('click', (e) => {
       const productId = e.target.dataset.id;
@@ -152,7 +147,7 @@ async function addToCart(productId, quantity) {
 
   const user = auth.currentUser;
   if (!user) {
-    showAlert('Please log in to add products to your cart.', 'error');
+    showAlert('Va rugam logati-va pentru a adauga produse in cos.', 'error');
     return;
   }
 
@@ -181,5 +176,5 @@ async function addToCart(productId, quantity) {
     });
   }
 
-  showAlert('Product added to cart!', 'success');
+  showAlert('Produs adaugat in cos!', 'success');
 }

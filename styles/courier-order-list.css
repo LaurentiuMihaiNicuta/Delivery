@@ -1,58 +1,83 @@
 #order-history-container {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    max-height: 70vh;
-    overflow-y: auto;
-    padding-right: 10px;
-    margin: 0 auto; /* Center the container */
-    max-width: 800px; /* Set a max width for better centering */
-  }
-  
-  .order-item {
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 10px;
-    background-color: #f9f9f9;
-  }
-  
-  .order-item p {
-    margin: 5px 0;
-  }
-  .orders-grid{
-    width:50%;
-  }
-  .products-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-    gap: 10px;
-    max-height: 150px;
-    overflow-y: auto;
-  }
-  
-  .product-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-  
-  .product-image {
-    width: 50px;
-    height: 50px;
-    object-fit: cover;
-    border-radius: 5px;
-  }
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Ajustăm dimensiunea minimă pentru elemente */
+  gap: 20px;
+  max-height: 70vh;
+  overflow-y: auto;
+  padding-right: 10px;
+  margin: 0 auto; /* Center the container */
+  max-width: 90%; /* Set a max width for better centering */
+}
 
-  #courier-main{
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
+.order-item {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  background-color: #f9f9f9;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 10px;
+  height: auto; /* Ajustăm înălțimea automată pentru a se potrivi conținutului */
+}
+
+.order-item.cancelled {
+  background-color: #ffcccc;
+}
+
+.order-item p {
+  margin: 5px 0;
+}
+
+.products-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 10px;
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+.products-list::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.products-list {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.product-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  height: 350px;
+}
+
+.product-image {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+#courier-main {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+.order-summary {
+  margin-top: 20px;
+  font-size: 16px;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  #order-history-container {
+    grid-template-columns: 1fr; /* O coloană pentru ecrane mai mici */
+    max-width: 95%; /* Adjust for smaller screens */
   }
-  
-  @media (max-width: 768px) {
-    #order-history-container {
-      max-width: 95%; /* Adjust for smaller screens */
-    }
-  }
+}

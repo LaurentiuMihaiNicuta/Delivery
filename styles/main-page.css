@@ -1,95 +1,105 @@
 #app {
-    height: 100vh;
-    padding-top: 60px; /* Adăugăm padding pentru a evita suprapunerea conținutului sub nav bar */
+  height: 100vh;
+  padding-top: 60px; /* Adăugăm padding pentru a evita suprapunerea conținutului sub nav bar */
+}
+
+.client-nav, .guest-nav {
+  background-color: #ff5200;
+  height: 70px; /* Ajustăm înălțimea nav bar-ului */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}
+
+.client-nav .logo, .guest-nav .logo {
+  height: 40px; /* Ajustăm dimensiunea logo-ului */
+}
+
+.client-nav .nav-links, .guest-nav .nav-links {
+  display: flex;
+  gap: 20px;
+}
+
+.client-nav .nav-links a, .guest-nav .nav-links a {
+  display: flex;
+  align-items: center;
+  background-color: #003355;
+  padding: 10px;
+  border-radius: 6px;
+  color: #fbfffd;
+  text-decoration: none; /* Elimină sublinierea */
+  font-size: 100%;
+}
+
+.client-nav .nav-links a:hover, .guest-nav .nav-links a:hover {
+  background-color: #ff5200;
+  color: #003355;
+}
+
+.client-nav .nav-icon, .guest-nav .nav-icon {
+  width: 20px; /* Ajustăm dimensiunea iconițelor */
+  height: 20px;
+  margin-right: 8px; /* Spațiu între iconiță și text */
+}
+
+.fixed-logout-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.fixed-logout-button:hover {
+  background-color: #45a049;
+}
+.client-dashboard-content{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+}
+
+.client-banners-container{
+  display: flex;
+  justify-content: space-around;
+}
+
+/* Media queries for responsiveness */
+@media (max-width: 768px) {
+  .client-nav, .guest-nav {
+    flex-direction: column;
+    height: auto;
   }
-  
-  .client-nav {
-    background-color: #ff5200;
-    height: 70px; /* Ajustăm înălțimea nav bar-ului */
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 20px;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 1000;
+  .client-nav .nav-links, .guest-nav .nav-links {
+    flex-direction: column;
+    width: 100%;
+    gap: 5px;
   }
-  
-  .client-nav .logo {
-    height: 40px; /* Ajustăm dimensiunea logo-ului */
+  .client-nav .nav-links a, .guest-nav .nav-links a {
+    width: 100%;
+    text-align: center;
   }
-  
-  .client-nav .nav-links {
-    display: flex;
-    gap: 20px;
+}
+
+@media (max-width: 480px) {
+  .client-nav, .guest-nav {
+    padding: 0px;
   }
-  
-  .client-nav .nav-links a {
-    display: flex;
-    align-items: center;
-    background-color: #003355;
-    padding: 10px;
-    border-radius: 6px;
-    color: #fbfffd;
-    text-decoration: none; /* Elimină sublinierea */
-    font-size: 100%;
+  .client-nav .nav-links, .guest-nav .nav-links {
+    gap: 5px;
   }
-  
-  .client-nav .nav-links a:hover {
-    background-color: #ff5200;
-    color: #003355;
+  .client-nav .nav-links a, .guest-nav .nav-links a {
+    font-size: 90%;
   }
-  
-  .client-nav .nav-icon {
-    width: 20px; /* Ajustăm dimensiunea iconițelor */
-    height: 20px;
-    margin-right: 8px; /* Spațiu între iconiță și text */
-  }
-  
-  .fixed-logout-button {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .fixed-logout-button:hover {
-    background-color: #45a049;
-  }
-  
-  /* Media queries for responsiveness */
-  @media (max-width: 768px) {
-    .client-nav {
-      flex-direction: column;
-      height: auto;
-    }
-    .client-nav .nav-links {
-      flex-direction: column;
-      width: 100%;
-      gap: 5px;
-    }
-    .client-nav .nav-links a {
-      width: 100%;
-      text-align: center;
-    }
-  }
-  
-  @media (max-width: 480px) {
-    .client-nav {
-      padding: 0px;
-    }
-    .client-nav .nav-links {
-      gap: 5px;
-    }
-    .client-nav .nav-links a {
-      font-size: 90%;
-    }
-  }
-  
+}

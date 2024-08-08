@@ -1,0 +1,28 @@
+.guest-content {
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .guest-content h2 {
+    margin-top: 20px;
+    font-size: 2em;
+    color: #003355;
+  }
+  
+  .guest-content p {
+    font-size: 1.2em;
+    color: #333;
+  }
+  
+  .banner-image {
+    margin-top: 20px;
+    width: 40%;
+
+    height : 50em;
+    border-radius: 10px;
+  }
+
+  .banner-container{
+    display: flex;
+    justify-content: space-around;
+  }

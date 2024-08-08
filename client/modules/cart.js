@@ -184,7 +184,7 @@ async function removeFromCart(productId) {
     });
   }
 
-  showAlert('Product removed from cart!', 'success');
+  showAlert('Produs scos din cos!', 'success');
 }
 
 async function updateCartQuantity(productId, newQuantity) {
@@ -213,7 +213,7 @@ async function updateCartQuantity(productId, newQuantity) {
 
 async function placeOrder(cartProducts) {
   if (cartProducts.length === 0) {
-    showAlert("Your cart is empty. Cannot place an order.", 'error');
+    showAlert("Cosul tau este gol.Te rugam adauga produse pentru a comanda", 'error');
     return false;
   }
 
@@ -229,7 +229,7 @@ async function placeOrder(cartProducts) {
   const activeOrdersSnapshot = await getDocs(activeOrdersQuery);
 
   if (!activeOrdersSnapshot.empty) {
-    showAlert("You have an active order. Please wait for it to be completed before placing a new one.", 'error');
+    showAlert("O comanda este deja activa!.", 'error');
     return false;
   }
 
@@ -264,7 +264,7 @@ async function placeOrder(cartProducts) {
         free: false
       });
 
-      showAlert("Order placed successfully!", 'success');
+      showAlert("Comanda ta a fost preluata cu success!", 'success');
       return true;
     } catch (error) {
       console.error("Error placing order:", error);
@@ -272,7 +272,7 @@ async function placeOrder(cartProducts) {
       return false;
     }
   } else {
-    showAlert("No couriers available at the moment.", 'error');
+    showAlert("Nu avem nici un curier disponibil momentan.", 'error');
     return false;
   }
 }

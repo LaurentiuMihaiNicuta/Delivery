@@ -46,42 +46,57 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 20px;
-  background-color: #f4f4f4; /* Fundal gri pentru lista de produse */
+  background-color: #f4f4f4;
+  row-gap: 50px;
 }
 
 .product {
   border: 1px solid #ddd;
   border-radius: 5px;
-  padding: 10px;
+  padding: 20px;
   text-align: center;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 100%; /* Ensure all product cards have the same height */
-  background-color: #ffffff; /* Fundal alb pentru produsele individuale */
+  height: 100%;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+  margin-bottom: 20px; /* Adăugăm spațiu între elementele de sus și cele de jos */
+}
+
+.product:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 .product-image-container {
-  min-height: 150px;
-  max-height: 150px; /* Set a minimum height for the image container */
+  min-height: 200px;
+  max-height: 300px;
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 }
 
-.product-image {
-  max-width: 100%;
-  max-height: 100%;
+img.product-image {
+  max-width: 60%;
+  max-height: 60%;
+  min-width: 60%;
+  min-height: 60%;
+  object-fit: fit;
   border-radius: 5px;
 }
 
 .product h3 {
   margin-top: 10px;
-  font-size: 1.2em;
+  font-size: 1.5em;
+  color: #003355;
 }
 
 .product p {
   margin: 5px 0;
+  color: #333;
 }
 
 .add-to-cart-button {
@@ -91,18 +106,18 @@
   padding: 10px;
   cursor: pointer;
   border-radius: 5px;
+  transition: background-color 0.2s;
 }
 
 .add-to-cart-button:hover {
   background-color: #04536c;
 }
 
-
 .quantity-control {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 10px;
+  margin-bottom:10px;
 }
 
 .quantity-control button {
@@ -116,12 +131,21 @@
 }
 
 .quantity-control input {
-
   width: 50px;
   text-align: center;
   padding: 5px;
   border: 1px solid #ccc;
   border-radius: 5px;
-
   -moz-appearance: textfield;
 }
+
+@media (max-width: 768px) {
+  #products-list {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
+  .product-image-container {
+    min-height: 150px;
+    max-height: 150px;
+  }
+}
+

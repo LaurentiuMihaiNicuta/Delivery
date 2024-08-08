@@ -1,6 +1,8 @@
 import { db } from '../../firebase-config.js';
 import { collection, getDocs, query, where, getDoc, doc } from 'firebase/firestore';
 import '../../styles/admin-styles/admin-reports-courier.css';
+import { showAlert } from '../../alert.js';
+import { showConfirm } from '../../confirm.js';
 
 export function renderCourierReport() {
   document.getElementById('report-result').innerHTML = `
@@ -39,7 +41,7 @@ async function generateCourierReport() {
   const date = document.getElementById('date-select').value;
 
   if (!courierId || !date) {
-    alert('Te rog să selectezi un curier și o dată.');
+    showAlert('Te rog să selectezi un curier și o dată.', 'error');
     return;
   }
 
@@ -50,9 +52,12 @@ async function generateCourierReport() {
     where('createdAt', '<=', new Date(`${date}T23:59:59`))
   ));
 
-  const orders = ordersSnapshot.docs.map(doc => doc.data()).reverse();
+  const orders = ordersSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })).reverse();
   const totalRevenue = orders.reduce((total, order) => {
-    return total + order.products.reduce((sum, product) => sum + (Number(product.price) * product.orderedQuantity), 0);
+    if (order.status !== 'cancelled') {
+      return total + order.products.reduce((sum, product) => sum + (Number(product.price) * product.orderedQuantity), 0);
+    }
+    return total;
   }, 0);
 
   renderCourierReportDetails(courierId, date, totalRevenue, orders);
@@ -71,10 +76,11 @@ async function renderCourierReportDetails(courierId, date, totalRevenue, orders)
   document.getElementById('report-date').textContent = date;
 
   document.getElementById('courier-orders-grid').innerHTML = orders.map(order => `
-    <div class="order-card">
+    <div class="order-card ${order.status === 'cancelled' ? 'cancelled' : 'delivered'}">
       <p>Adresă: ${order.address}</p>
       <p>Produse: ${order.products.map(p => `${p.name} (${p.orderedQuantity})`).join(', ')}</p>
       <p>Total: ${order.products.reduce((sum, p) => sum + (Number(p.price) * p.orderedQuantity), 0).toFixed(2)} RON</p>
+      <p>Status: ${order.status === 'cancelled' ? 'Anulată' : 'Livrată'}</p>
     </div>
   `).join('');
 }

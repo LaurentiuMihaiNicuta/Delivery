@@ -25,7 +25,7 @@ export async function renderCourierOrderList() {
   const ordersSnapshot = await getDocs(courierOrdersQuery);
 
   const contentDiv = document.getElementById('courier-main');
-  contentDiv.innerHTML = `<h2>Order history for today</h2>`;
+  contentDiv.innerHTML = `<h2>Comenzile tale pe ziua de azi</h2>`;
 
   if (ordersSnapshot.empty) {
     contentDiv.innerHTML += `<p>No orders for today.</p>`;
@@ -42,24 +42,28 @@ export async function renderCourierOrderList() {
     })
   );
 
-  console.log('Orders:', orders); // Log the orders for debugging
+  let totalRevenue = 0;
+  const activeOrders = orders.filter(order => order.status !== 'cancelled');
+  activeOrders.forEach(order => {
+    totalRevenue += order.products.reduce((sum, product) => sum + (product.price * product.orderedQuantity), 0);
+  });
 
   contentDiv.innerHTML += `
-    <div class="orders-grid">
+    <div id="order-history-container">
       ${orders.map(order => `
-        <div class="order-item">
-          <h3>Order ID: ${order.id}</h3>
+        <div class="order-item ${order.status === 'cancelled' ? 'cancelled' : ''}">
           <p>Client: ${order.customer.name || 'Unknown'}</p>
           <p>Phone: ${order.customer.phone || 'Unknown'}</p>
           <p>Address: ${order.address}</p>
           <p>Status: ${order.status}</p>
-          <div class="products-grid">
+          <p>Total: ${order.products.reduce((sum, product) => sum + (product.price * product.orderedQuantity), 0).toFixed(2)} RON</p>
+          <div class="products-list">
             ${order.products.map(product => `
               <div class="product-item">
                 <img src="${product.imagePath}" alt="${product.name}" class="product-image">
                 <div class="product-details">
                   <p>${product.name}</p>
-                  <p>Quantity: ${product.orderedQuantity}</p>
+                  <p>Cantitate: ${product.orderedQuantity}</p>
                   <p>Price: ${product.price} RON</p>
                 </div>
               </div>
@@ -67,6 +71,10 @@ export async function renderCourierOrderList() {
           </div>
         </div>
       `).join('')}
+    </div>
+    <div class="order-summary">
+      <p>Comenzi livrate azi: ${activeOrders.length}</p>
+      <p>Bani facuti azi: ${totalRevenue.toFixed(2)} RON</p>
     </div>
   `;
 }

@@ -13,8 +13,8 @@
   }
   
   .alert {
-    background-color: #f8d7da; /* Default red for error */
-    color: #721c24;
+    background-color: #003355; /* Default red for error */
+    color: #ff5100;
     padding: 20px;
     margin: 10px 0;
     border: 1px solid transparent;
@@ -25,8 +25,8 @@
   }
   
   .alert-success {
-    background-color: #ff510067;
-    color: #290d00;
+    background-color: #ff5100;
+    color: #160801;
   }
   
   .alert.show {
@@ -42,4 +42,22 @@
     float: right;
     cursor: pointer;
   }
+
+  .confirm-buttons {
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-around;
+  }
   
+  .confirm-buttons button {
+    background-color: #ff5100;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .confirm-buttons button:hover {
+    background-color: #04536c;
+  }

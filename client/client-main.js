@@ -1,3 +1,5 @@
+//client-main.js
+
 import '../styles/main-page.css';
 import { renderProducts } from './modules/products.js';
 import { renderCart } from './modules/cart.js';
@@ -6,6 +8,7 @@ import { auth } from '../firebase-config.js';
 import { signOut } from 'firebase/auth';
 import { renderRoleSelection } from '../role-selection.js';
 import { renderOrder } from './modules/order.js';
+import { renderGuestMainPage } from '../guest/guest-main.js';
 
 export function renderClientMainPage() {
   console.log('Rendering Client Main Page'); // Debugging log
@@ -39,14 +42,23 @@ function renderClientDashboard() {
   console.log('Rendering Client Dashboard'); // Debugging log
   const clientContentDiv = document.getElementById('content');
   clientContentDiv.innerHTML = `
-    <h2>Dashboard Client</h2>
-    <p>Bine ai venit în dashboard-ul clientului.</p>
+    <div class="client-dashboard-content">
+
+    <h2>Home</h2>
+    <p>Bine ai revenit in aplicatie! Avem noi oferte pentru tine.</p>
+    <div class="client-banners-container">
+
+    <img src="banner.png" alt="Banner" class="banner-image">
+    <img src="banner2.png" alt="Banner" class="banner-image">
+
+    </div>
+    </div>
   `;
 }
 
 function handleLogout() {
   signOut(auth).then(() => {
-    renderRoleSelection();
+    renderGuestMainPage();
   }).catch((error) => {
     console.error('Logout error:', error);
   });

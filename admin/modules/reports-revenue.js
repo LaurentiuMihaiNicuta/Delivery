@@ -1,6 +1,8 @@
 import { db } from '../../firebase-config.js';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import '../../styles/admin-styles/admin-reports-revenue.css';
+import { showAlert } from '../../alert.js';
+import { showConfirm } from '../../confirm.js';
 
 export async function renderRevenueReport() {
   document.getElementById('report-result').innerHTML = `
@@ -28,7 +30,7 @@ async function generateRevenueReport() {
   const endDate = document.getElementById('end-date-select').value;
 
   if (!startDate || !endDate) {
-    alert('Te rog să selectezi ambele date.');
+    showAlert('Te rog să selectezi ambele date.', 'error');
     return;
   }
 
@@ -38,7 +40,8 @@ async function generateRevenueReport() {
   const ordersSnapshot = await getDocs(query(
     collection(db, 'orders'),
     where('createdAt', '>=', startDateTime),
-    where('createdAt', '<=', endDateTime)
+    where('createdAt', '<=', endDateTime),
+    where('status', '!=', 'cancelled') 
   ));
 
   const orders = ordersSnapshot.docs.map(doc => doc.data());

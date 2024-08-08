@@ -4,6 +4,7 @@ import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { renderLogin } from '../client-login.js';
 import { showAlert } from '../../alert.js';
 
+
 export async function renderSettings() {
   const contentDiv = document.getElementById('profile-content');
   const user = auth.currentUser;
@@ -109,7 +110,11 @@ export async function renderSettings() {
       await updatePassword(user, newPassword);
       showAlert('Parola a fost schimbată cu succes!', 'success');
     } catch (error) {
-      showAlert('Eroare la schimbarea parolei: ' + error.message, 'error');
+      if (error.code === 'auth/wrong-password') {
+        showAlert('Parola inițială nu este corectă!', 'error');
+      } else {
+        showAlert('Parola initiala nu este corecta! ' , 'error');
+      }
     }
   });
 }
